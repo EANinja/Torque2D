@@ -514,24 +514,6 @@ ConsoleMethod(SceneObject, getPosition, const char*, 2, 2, "() Gets the object's
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getPositionX, F32, 2, 2, "() Gets the object's x position.\n"
-                                                       "@return (float x) The horizontal position of the object")
-{
-    // Get Position X-Component.
-    return object->getPosition().x;
-}
-
-//-----------------------------------------------------------------------------
-
-ConsoleMethod(SceneObject, getPositionY, F32, 2, 2, "() Gets the object's y position.\n"
-                                                       "@return (float y) The vertical position of the object")
-{
-    // Get Position Y-Component.
-    return object->getPosition().y;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, getRenderPosition, const char*, 2, 2, "() Gets the current render position.\n"
                                                                     "@return (float x/float y) The x and y (horizontal and vertical) render position of the object.")
 {
@@ -3689,18 +3671,6 @@ ConsoleMethod(SceneObject, detachGui, void, 2, 2, "() - Detach any GUI Control.\
 
 //-----------------------------------------------------------------------------
 
-ConsoleMethod(SceneObject, getAttachedToPath, S32, 2, 2, "() - Gets the Path that this object is attached to.\n"
-                                                            "@return (Path path) The path that this object is attached to, or 0 if it is not attached to a path.")
-{
-   SceneObject* path = object->getAttachedToPath();
-   if (path)
-      return path->getId();
-   
-   return NULL;
-}
-
-//-----------------------------------------------------------------------------
-
 ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDynamicFields? = false]) - Copies one scene object from another scene object.\n"
                                                     "The object being copied to needs to be of the same class as the object being copied from.\n"
                                                     "@param object The SceneObject to copy this object to.\n"
@@ -3725,6 +3695,26 @@ ConsoleMethod(SceneObject, copyFrom, bool, 3, 4, "(SceneObject object, [copyDyna
     object->copyFrom( pSceneObject, copyDynamicFields );
 
     return true;
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneObject, setPickingAllowed, void, 3, 3,   "(bool pickingAllowed) - Sets whether picking is allowed or not.\n"
+                                                            "@param pickingAllowed Whether picking is allowed or not.\n"
+                                                            "@return No return Value.")
+{
+    // Fetch flag.
+    const bool pickingAllowed = dAtob(argv[2]);
+
+    object->setPickingAllowed( pickingAllowed );
+}
+
+//-----------------------------------------------------------------------------
+
+ConsoleMethod(SceneObject, getPickingAllowed, bool, 2, 2,   "() - Gets whether picking is allowed or not.\n"
+                                                            "@return Whether picking is allowed or not.")
+{
+    return object->getPickingAllowed();
 }
 
 //-----------------------------------------------------------------------------
