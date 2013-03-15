@@ -1,10 +1,6 @@
-#include <io.h>
-#include <tchar.h>
-#include "string/stringTable.h"
 #include "PluginManager.h"
 #include "Plugin.h"
 
-using std::string;
 
 PluginManager * PluginManager::s_pInstance = NULL;
 
@@ -18,41 +14,46 @@ PluginManager & PluginManager::GetInstance()
     return *s_pInstance;
 }
 
-void PluginManager::LoadPlugins ( const std::string & strDir )
+void PluginManager::LoadPlugins ( const StringTableEntry & strDir )
 {
-    std::vector<std::string> filenames;
+    Vector<StringTableEntry> filenames;
     GetFilenames(strDir, filenames);
 
-    std::vector<std::string>::const_iterator it;
+	Vector<StringTableEntry>::const_iterator it;
     for (it = filenames.begin(); it != filenames.end(); ++it)
     {
-        const std::string & filename = *it;
-        std::string & fullName = strDir + string("\\") + filename;
+        const StringTableEntry & filename = *it;
+        StringBuffer & fullName = strDir;
+		fullName.append("\\");
+		fullName.append(filename);
+		StringTableEntry tempName = fullName;
         LoadPlugin (fullName);
     }
 }
 
-void PluginManager::GetFilenames ( const std::string & dir, 
-                                  std::vector<std::string> & filenames ) const
+void PluginManager::GetFilenames ( const StringTableEntry & dir, 
+                                  Vector<StringTableEntry> & filenames ) const
 {
-    string mask = dir + string("\\*.plug");
+    StringTableEntry mask = dir + "\\*.plug";
 
     struct _finddata_t fileinfo;
     long handle = ::_findfirst(mask.c_str(), &fileinfo);
     long file   = handle;
 
+	StringTableEntry tempName;
 	while (file >= 0)
 	{
-        filenames.push_back(std::string(fileinfo.name));
+		tempName = fileinfo.name;
+        filenames.push_back(tempName);
         file = ::_findnext(handle, &fileinfo);
 	}
 
     ::_findclose(handle);
 }
 
-bool PluginManager::LoadPlugin ( const std::string & filename )
+bool PluginManager::LoadPlugin ( const StringTableEntry & filename )
 {
-    HMODULE hDll = ::LoadLibrary ((LPTSTR)filename.c_str());
+    HMODULE hDll = ::LoadLibrary ((LPTSTR)filename);
     if ( hDll == NULL )
     {
         LPVOID lpMsgBuf;
@@ -67,15 +68,16 @@ bool PluginManager::LoadPlugin ( const std::string & filename )
             0,
             NULL 
         );
-
-        ::OutputDebugString((LPTSTR)lpMsgBuf);
+		StringTableEntry msg = static_cast<StringTableEntry>(lpMsgBuf);
+		
+        Con::errorf(msg);
 
         LocalFree( lpMsgBuf );
         return false;
     }
 
 
-    CREATEPLUGIN pFunc = (CREATEPLUGIN)::GetProcAddress (hDll, _T("CreatePlugin"));
+    CREATEPLUGIN pFunc = (CREATEPLUGIN)::GetProcAddress (hDll, "CreatePlugin");
     if ( pFunc == NULL )
         return false;
 
@@ -102,7 +104,7 @@ void PluginManager::UnloadAll ( void )
 {
     //MainFrame * pMainFrame = static_cast<MainFrame*>(::AfxGetMainWnd());
 
-    std::vector<PluginInfo>::iterator it;
+    Vector<PluginInfo>::iterator it;
     for (it=m_plugins.begin(); it!=m_plugins.end(); ++it)
     {
         PluginInfo & info = *it;

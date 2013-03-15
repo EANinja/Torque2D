@@ -2,7 +2,10 @@
 #ifndef IPLUGIN_H_
 #define IPLUGIN_H_
 
-
+#include "platform/platformFileIO.h"
+#include "platformWin32/platformWin32.h"
+#include "collection/vector.h"
+#include "console/console.h"
 
 #ifdef PLUGIN_EXPORTS
 #define PLUGINDECL __declspec(dllexport)
@@ -23,8 +26,8 @@ class IPlugin
     virtual bool Shutdown() = 0;
     virtual void About(HWND hParent) = 0;
 
-    virtual const std::string & GetName() = 0;
-    virtual const std::string & GetExportName() = 0;
+	virtual const StringTableEntry & GetName() = 0;
+	virtual const StringTableEntry & GetExportName() = 0;
 
     virtual bool Export( const char * pData ) = 0;
 };
