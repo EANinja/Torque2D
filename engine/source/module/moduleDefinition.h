@@ -134,7 +134,7 @@ public:
     inline U32              getBuildId( void ) const                            { return mBuildId; }
     inline void             setEnabled( const bool enabled )                    { if ( checkUnlocked() ) { mEnabled = enabled; } }
     inline bool             getEnabled( void ) const                            { return mEnabled; }
-    inline void             setSynchronized( const bool synchronized )          { if ( checkUnlocked() ) { mSynchronized = synchronized; } }
+	inline void             setSynchronized( const bool synchronized )          { if ( checkUnlocked() ) { mSynchronized = synchronized; } }
     inline bool             getSynchronized( void ) const                       { return mSynchronized; }
     inline void             setDeprecated( const bool deprecated )              { if ( checkUnlocked() ) { mDeprecated = deprecated; } }
     inline bool             getDeprecated( void ) const                         { return mDeprecated; }
@@ -202,7 +202,7 @@ protected:
     static bool             writeBuildId( void* obj, StringTableEntry pFieldName )      { return static_cast<ModuleDefinition*>(obj)->getBuildId() != 0; }
     static bool             setEnabled(void* obj, const char* data)                     { static_cast<ModuleDefinition*>(obj)->setEnabled( dAtob(data) ); return false; }
     static bool             writeEnabled( void* obj, StringTableEntry pFieldName )      { return static_cast<ModuleDefinition*>(obj)->getEnabled() == false; }
-    static bool             setSynchronized(void* obj, const char* data)                { static_cast<ModuleDefinition*>(obj)->setSynchronized( dAtob(data) ); return false; }
+	static bool             setSynchronized(void* obj, const char* data)                { static_cast<ModuleDefinition*>(obj)->setSynchronized( dAtob(data) ); return false; }
     static bool             writeSynchronized( void* obj, StringTableEntry pFieldName ) { return static_cast<ModuleDefinition*>(obj)->getSynchronized() == true; }
     static bool             setDeprecated(void* obj, const char* data)                  { static_cast<ModuleDefinition*>(obj)->setDeprecated( dAtob(data) ); return false; }
     static bool             writeDeprecated( void* obj, StringTableEntry pFieldName )   { return static_cast<ModuleDefinition*>(obj)->getDeprecated() == true; }

@@ -33,7 +33,7 @@ class IPlugin
 };
 
 
-typedef IPlugin * (* CREATEPLUGIN)(PluginManager&mgr);
+typedef IPlugin * (* CREATEPLUGIN)(PluginManager & mgr);
 
 extern "C" PLUGINDECL IPlugin * CreatePlugin(PluginManager & mgr);
 
