@@ -16,8 +16,8 @@ PluginManager & PluginManager::GetInstance()
 
 bool PluginManager::LoadPlugin ( const StringTableEntry & filename )
 {
-	char* fullPath;
-	if (Con::expandPath(fullPath, sizeof(filename), filename))
+	char fullPath[2048];
+	if (Con::expandPath(fullPath, sizeof(fullPath), filename))
 	{
 		HMODULE hDll = ::LoadLibrary ((LPTSTR)fullPath);
 		if ( hDll == NULL )
