@@ -65,7 +65,8 @@ bool PluginManager::LoadPlugin ( const StringTableEntry & filename )
 
 		return true;
 	}
-	return false;
+	else
+		return false;
 }
 
 void PluginManager::UnloadAll ( void )

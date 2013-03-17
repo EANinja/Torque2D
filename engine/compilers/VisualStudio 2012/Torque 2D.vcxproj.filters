@@ -172,6 +172,9 @@
     <Filter Include="2d\controllers\core">
       <UniqueIdentifier>{6aeaed85-4546-4496-8415-72a392e830ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="plug-in">
+      <UniqueIdentifier>{53dca46e-e035-4484-a022-34101b8a2b7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\audio\audio.cc">
@@ -1295,6 +1298,11 @@
     </ClCompile>
     <ClCompile Include="..\..\source\2d\controllers\core\PickingSceneController.cc">
       <Filter>2d\controllers\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\2d\core\SpriteBatchQuery.cc" />
+    <ClCompile Include="..\..\source\2d\experimental\composites\WaveComposite.cc" />
+    <ClCompile Include="..\..\source\plugin\PluginManager.cpp">
+      <Filter>plug-in</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2657,6 +2665,16 @@
     </ClInclude>
     <ClInclude Include="..\..\source\2d\controllers\core\SceneController.h">
       <Filter>2d\controllers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQuery.h" />
+    <ClInclude Include="..\..\source\2d\core\SpriteBatchQueryResult.h" />
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite.h" />
+    <ClInclude Include="..\..\source\2d\experimental\composites\WaveComposite_ScriptBinding.h" />
+    <ClInclude Include="..\..\source\plugin\plugin.h">
+      <Filter>plug-in</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\plugin\PluginManager.h">
+      <Filter>plug-in</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

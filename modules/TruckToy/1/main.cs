@@ -755,7 +755,8 @@ function TruckToy::createTruck( %this, %posX, %posY )
 
     // Suspension joints.
     TruckToy.RearMotorJoint = SandboxScene.createWheelJoint( TruckToy.TruckBody, %tireRear, "-1.4 -1.25", "0 0", "0 1" );
-    TruckToy.FrontMotorJoint = SandboxScene.createWheelJoint( TruckToy.TruckBody, %tireFront, "1.7 -1.25", "0 0", "0 1" );     
+    TruckToy.FrontMotorJoint = SandboxScene.createWheelJoint( TruckToy.TruckBody, %tireFront, "1.7 -1.25", "0 0", "0 1" );
+    TamlWrite(TruckToy.TruckBody, "truckbody.taml");
 }
 
 // -----------------------------------------------------------------------------

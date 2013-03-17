@@ -561,6 +561,7 @@
     <ClCompile Include="..\..\source\platformWin32\threads\mutex.cc" />
     <ClCompile Include="..\..\source\platformWin32\threads\thread.cc" />
     <ClCompile Include="..\..\source\platform\Tickable.cc" />
+    <ClCompile Include="..\..\source\plugin\PluginManager.cpp" />
     <ClCompile Include="..\..\source\sim\scriptGroup.cc" />
     <ClCompile Include="..\..\source\sim\scriptObject.cc" />
     <ClCompile Include="..\..\source\sim\simBase.cc" />
@@ -1023,6 +1024,8 @@
     <ClInclude Include="..\..\source\platformWin32\winOGLVideo.h" />
     <ClInclude Include="..\..\source\platformWin32\winVideo.h" />
     <ClInclude Include="..\..\source\platformWin32\nativeDialogs\win32DirectoryResolver.h" />
+    <ClInclude Include="..\..\source\plugin\plugin.h" />
+    <ClInclude Include="..\..\source\plugin\PluginManager.h" />
     <ClInclude Include="..\..\source\sim\scriptGroup.h" />
     <ClInclude Include="..\..\source\sim\scriptObject.h" />
     <ClInclude Include="..\..\source\sim\simBase.h" />
