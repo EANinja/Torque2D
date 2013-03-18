@@ -17,7 +17,7 @@
 class PluginManager;
 
 
-class IPlugin 
+class IPlugin
 {
   public:
     virtual ~IPlugin() {};

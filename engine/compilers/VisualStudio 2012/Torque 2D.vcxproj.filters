@@ -1304,6 +1304,9 @@
     <ClCompile Include="..\..\source\plugin\PluginManager.cpp">
       <Filter>plug-in</Filter>
     </ClCompile>
+    <ClCompile Include="PluginManager_ScriptBinding.cpp">
+      <Filter>plug-in</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\audio\audio.h">

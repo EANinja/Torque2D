@@ -1,10 +1,19 @@
 #include "PluginManager.h"
 #include "Plugin.h"
 
+IMPLEMENT_CONOBJECT( PluginManager );
+
+PluginManager PluginDatabase;
 
 PluginManager * PluginManager::s_pInstance = NULL;
 
 PluginManager::PluginManager(){}
+
+void PluginManager::initPersistFields()
+{
+    // Call parent.
+    Parent::initPersistFields();
+}
 
 PluginManager & PluginManager::GetInstance()
 {
@@ -66,7 +75,10 @@ bool PluginManager::LoadPlugin ( const StringTableEntry & filename )
 		return true;
 	}
 	else
+	{
+		Con::errorf("Plug-in Manager failed to load %s, File does not exist", fullPath);
 		return false;
+	}
 }
 
 void PluginManager::UnloadAll ( void )

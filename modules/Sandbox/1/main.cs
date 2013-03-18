@@ -61,6 +61,7 @@ function Sandbox::create( %this )
         Image = "Sandbox:CannotRender";
     };
     Sandbox.add( CannotRenderProxy );
+    echo(" @@@ Plug-in Manager ID: " @ PluginDatabase.getID());
 }
 
 //-----------------------------------------------------------------------------

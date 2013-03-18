@@ -58,6 +58,8 @@
 #include "platform/nativeDialogs/msgBox.h"
 #include "platform/nativeDialogs/fileDialog.h"
 #include "memory/safeDelete.h"
+#include "plugin/plugin.h"
+#include "plugin/PluginManager.h"
 
 #include <stdio.h>
 
@@ -219,7 +221,9 @@ bool initializeGame(int argc, const char **argv)
     Con::addVariable("frameSkip", TypeS32, &gFrameSkip);
 
     initMessageBoxVars();
-
+	
+	// Register the plug-in manager.
+	PluginDatabase.registerObject( "PluginDatabase" );
 
     // Register the module manager.
     ModuleDatabase.registerObject( "ModuleDatabase" );
