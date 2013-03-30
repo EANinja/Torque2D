@@ -28,8 +28,6 @@ class IPlugin
 
 	virtual const StringTableEntry & GetName() = 0;
 	virtual const StringTableEntry & GetExportName() = 0;
-
-    virtual bool Export( const char * pData ) = 0;
 };
 
 

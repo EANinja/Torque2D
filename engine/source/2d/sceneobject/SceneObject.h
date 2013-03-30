@@ -96,7 +96,7 @@ extern EnumTable dstBlendFactorTable;
 
 //-----------------------------------------------------------------------------
 
-class SceneObject :
+extern "C" class __declspec(dllexport) SceneObject :
     public BehaviorComponent,
     public SceneRenderObject,
     public PhysicsProxy

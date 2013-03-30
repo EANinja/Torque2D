@@ -1,0 +1,21 @@
+<Sprite
+    SceneLayer="20"
+    SceneGroup="15"
+    size="5 2.5"
+    Position="-96.667 3"
+    CollisionGroups="49152"
+    PickingAllowed="1"
+    Image="@asset=TruckToy:truckBody"
+    Frame="0">
+    <Sprite.CollisionShapes>
+        <Polygon>
+            <Point>2 -0.5</Point>
+            <Point>2 0</Point>
+            <Point>0 0.7</Point>
+            <Point>-1.5 0.7</Point>
+            <Point>-2 0.2</Point>
+            <Point>-2 -0.5</Point>
+            <Point>0 -0.95</Point>
+        </Polygon>
+    </Sprite.CollisionShapes>
+</Sprite>

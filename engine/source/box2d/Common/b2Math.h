@@ -61,7 +61,7 @@ inline float32 b2InvSqrt(float32 x)
 #define	b2Atan2(y, x)	std::atan2(y, x)
 
 /// A 2D column vector.
-struct b2Vec2
+extern "C" struct __declspec(dllexport)  b2Vec2
 {
 	/// Default constructor does nothing (for performance).
 	b2Vec2() {}

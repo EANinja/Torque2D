@@ -49,7 +49,7 @@
 
 //------------------------------------------------------------------------------
 
-class SpriteProxyBase : public virtual Tickable, public IFactoryObjectReset
+extern "C" class __declspec(dllexport) SpriteProxyBase : public virtual Tickable, public IFactoryObjectReset
 {
 protected:
     AssetPtr<ImageAsset>        mImageAsset;

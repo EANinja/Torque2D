@@ -49,7 +49,7 @@ DefineConsoleType( TypeVector2 )
 
 ///-----------------------------------------------------------------------------
 
-struct Vector2 : b2Vec2
+struct __declspec(dllexport) Vector2 : b2Vec2
 {
     /// Constructors.
     inline Vector2( void ) {}

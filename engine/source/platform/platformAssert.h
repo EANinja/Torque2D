@@ -27,7 +27,7 @@
 #include "platform/platform.h"
 #endif
 
-class PlatformAssert
+extern "C" class __declspec(dllexport) PlatformAssert
 {
 public:
    enum Type 

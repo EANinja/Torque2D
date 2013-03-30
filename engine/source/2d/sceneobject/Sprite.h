@@ -29,7 +29,7 @@
 
 //------------------------------------------------------------------------------
 
-class Sprite : public SpriteBase
+extern "C" class __declspec(dllexport) Sprite : public SpriteBase
 {
     typedef SpriteBase Parent;
 

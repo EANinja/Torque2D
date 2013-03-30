@@ -41,7 +41,7 @@
 
 //------------------------------------------------------------------------------
 
-class SpriteBase : public SceneObject, public SpriteProxyBase
+extern "C" class __declspec(dllexport) SpriteBase : public SceneObject, public SpriteProxyBase
 {
     typedef SceneObject Parent;
 

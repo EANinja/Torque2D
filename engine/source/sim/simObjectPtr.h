@@ -52,7 +52,7 @@
 ///     // And reassign it - it will automatically update the references.
 ///     mOrbitObject = Sim::findObject("anotherObject");
 /// @endcode
-template <class T> class SimObjectPtr
+template <class T> class __declspec(dllexport) SimObjectPtr
 {
   private:
    SimObject *mObj;

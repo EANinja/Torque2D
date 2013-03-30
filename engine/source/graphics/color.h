@@ -42,7 +42,7 @@ class ColorI;
 
 //-----------------------------------------------------------------------------
 
-class ColorF
+extern "C" class __declspec(dllexport) ColorF
 {
   public:
    F32 red;
