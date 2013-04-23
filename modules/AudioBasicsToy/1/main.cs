@@ -248,7 +248,7 @@ function ButtonClass::onTouchDown(%this, %touchID, %worldPos)
    }
 }
 
-function TrapClass::handleCollision(%this, %object, %collisionDetails)
+function TrapClass::onCollision(%this, %object, %collisionDetails)
 {
    // Create explosion
    %anim = new Sprite() {class = "KnightClass";};
