@@ -20,20 +20,44 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-// Sandbox.
-$pref::Sandbox::defaultToyId           = "Inventory";
-$pref::Sandbox::defaultToyVersionId    = 1;
-$pref::Sandbox::defaultBackgroundColor = "Black";
-$pref::Sandbox::metricsOption   = false;
-$pref::Sandbox::fpsmetricsOption = true;
-$pref::Sandbox::controllersOption = false;
-$pref::Sandbox::jointsOption    = false;
-$pref::Sandbox::wireframeOption = false;
-$pref::Sandbox::aabbOption      = false;
-$pref::Sandbox::oobbOption      = false;
-$pref::Sandbox::sleepOption     = false;
-$pref::Sandbox::collisionOption = false;
-$pref::Sandbox::positionOption  = false;
-$pref::Sandbox::sortOption      = false;
-$pref::Sandbox::cameraMouseZoomRate = 0.1;
-$pref::Sandbox::cameraTouchZoomRate = 0.001;
+function Inventory::create( %this )
+{    
+    // Load the preferences.
+    %this.loadPreferences();
+    
+    // Load Inventory scripts.
+    exec( "./scripts/Inventory.cs" );
+        
+    // Load GUI profiles.
+    exec("./gui/guiProfiles.cs");
+
+    // Load and configure the inventory dialog.
+    Inventory.add( TamlRead("./gui/Inventory.gui.taml") );
+    GlobalActionMap.bind( keyboard, "i", ToggleInventory );
+}
+
+//-----------------------------------------------------------------------------
+
+function Inventory::destroy( %this )
+{
+}
+
+//-----------------------------------------------------------------------------
+
+function Inventory::loadPreferences( %this )
+{
+    // Load the default preferences.
+    exec( "./scripts/InventoryPreferences.cs" );
+    
+    // Load the last session preferences if available.
+    if ( isFile("preferences.cs") )
+        exec( "preferences.cs" );   
+}
+
+//-----------------------------------------------------------------------------
+
+function Inventory::savePreferences( %this )
+{
+    // Export only the Inventory preferences.
+    export("$pref::Inventory::*", "preferences.cs", false );
+}

@@ -1,0 +1,14 @@
+<ModuleDefinition
+	ModuleId="Inventory"
+	VersionId="1"
+	Dependencies="AppCore=1,ToyAssets=1,Sandbox=1"
+    Group="gameBase"
+	Description="A module for managing an inventory."
+	ScriptFile="main.cs"
+	CreateFunction="create"
+	DestroyFunction="destroy">
+		<DeclaredAssets
+			Path="assets"
+			Extension="asset.taml"
+			Recurse="true"/>
+</ModuleDefinition>

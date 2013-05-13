@@ -1,0 +1,32 @@
+<GuiSpriteCtrl
+    Name="InventoryDialog"
+    Profile="InventoryDefaultProfile"
+    HorizSizing="relative"
+    VertSizing="relative"
+    Position="0 0"
+    Extent="1024 768"
+    MinExtent="320 320"
+    Visible="1"
+	Image="@asset=Sandbox:largeContainer">
+	
+	<!-- Close Inventory -->
+	<GuiButtonCtrl
+		Name="InventoryCancelButton"
+		Profile="BlueButtonProfile"
+		Text="Hide Inventory"
+		ButtonType="PushButton"
+		command="toggleInventory(true);"
+		canSaveDynamicFields="0"
+		isContainer="0"
+		HorizSizing="relative"
+		VertSizing="relative"
+		Position="900 738"
+		Extent="124 30"
+		MinExtent="8 2"
+		canSave="1"
+		Visible="1"
+		Active="1"
+		hovertime="1000"
+		groupNum="-1"
+		useMouseEvents="1" />
+</GuiSpriteCtrl>
