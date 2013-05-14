@@ -839,11 +839,11 @@ function createVerticalScrollContainer(%profile)
 		buttonType="PushButton";
 		useMouseEvents="1";
 		isLegacyVersion="0";
-		NormalImage="{EditorAssets}:scrollUpImageMap";
-		HoverImage="{EditorAssets}:scrollUp_hImageMap";
-		DownImage="{EditorAssets}:scrollUp_dImageMap";
-		InactiveImage="{EditorAssets}:scrollUp_iImageMap";
-		    normalImageCache="{EditorAssets}:scrollUpImageMap";
+		NormalImage="Inventory:northArrowNormal";
+		HoverImage="Inventory:northArrowHover";
+		DownImage="Inventory:northArrowDown";
+		InactiveImage="Inventory:northArrowInactive";
+		    normalImageCache="Inventory:northArrowNormal";
 	};
 	%scrollContainer.addGuiControl(%upButton);
 
@@ -885,11 +885,11 @@ function createVerticalScrollContainer(%profile)
 		buttonType="PushButton";
 		useMouseEvents="1";
 		isLegacyVersion="0";
-		NormalImage="{EditorAssets}:scrollDownImageMap";
-		HoverImage="{EditorAssets}:scrollDown_hImageMap";
-		DownImage="{EditorAssets}:scrollDown_dImageMap";
-		InactiveImage="{EditorAssets}:scrollDown_iImageMap";
-		    normalImageCache="{EditorAssets}:scrollDownImageMap";
+		NormalImage="Inventory:southArrowNormal";
+		HoverImage="Inventory:southArrowHover";
+		DownImage="Inventory:southArrowDown";
+		InactiveImage="Inventory:southArrowInactive";
+		    normalImageCache="Inventory:southArrowNormal";
 	};
 	%scrollContainer.addGuiControl(%downButton);
 
