@@ -42,7 +42,7 @@ function Sandbox::create( %this )
     // Load and configure the console.
     Sandbox.add( TamlRead("./gui/ConsoleDialog.gui.taml") );
     GlobalActionMap.bind( keyboard, "ctrl tilde", toggleConsole );
-    GlobalActionMap.bind( keyboard, "escape", exit );
+    GlobalActionMap.bind( keyboard, "escape", exitGame );
     
     // Load and configure the toolbox.
     Sandbox.add( TamlRead("./gui/ToolboxDialog.gui.taml") );
@@ -100,4 +100,10 @@ function Sandbox::savePreferences( %this )
     // Export only the sandbox preferences.
     export("$pref::Sandbox::*", "preferences.cs", false );        
     export("$pref::Video::*", "preferences.cs", true );
+}
+
+function exitGame()
+{
+    echo(" @@@ quitting....");
+    quit();
 }

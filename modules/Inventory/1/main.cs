@@ -20,6 +20,8 @@ function Inventory::create( %this )
 
 function Inventory::destroy( %this )
 {
+    echo ( " @@@ Inventory::destroy()");
+    %this.savePreferences();
 }
 
 //-----------------------------------------------------------------------------
