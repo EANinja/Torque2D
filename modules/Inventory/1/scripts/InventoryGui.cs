@@ -18,14 +18,21 @@ function InventoryDialog::onSleep(%this)
 
 function InventoryDialog::initialize(%this)
 {
-    %buttonWidth = InventoryCancelButton.Extent.x;
-    %dialogWidth = InventoryDialog.Extent.x;
-    %x = %dialogWidth - %buttonWidth - 10;
-    InventoryCancelButton.setPosition(%x, 10);
     Inventory.storeContainer = createVerticalScrollContainer();
-    Inventory.storeContainer.setExtent(240, (%this.Extent.y - 20));
-    Inventory.storeContainer.setPosition(10, 10);
-    %this.add(Inventory.storeContainer);
+    %this.storePane = new GuiControl()
+    {
+        Name="InventoryStorePane";
+        Profile="InventoryDefaultProfile";
+        HorizSizing="relative";
+        VertSizing="relative";
+        Position="0 0";
+        Extent="240 768";
+        MinExtent="240 320";
+        Visible="1";
+    };
+    %this.add(%this.storePane);
+    %this.storePane.add(Inventory.storeContainer);
+    Inventory.storeContainer.resizeContainer();
     %this.initialized = true;
 }
 

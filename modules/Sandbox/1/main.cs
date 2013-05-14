@@ -42,6 +42,7 @@ function Sandbox::create( %this )
     // Load and configure the console.
     Sandbox.add( TamlRead("./gui/ConsoleDialog.gui.taml") );
     GlobalActionMap.bind( keyboard, "ctrl tilde", toggleConsole );
+    GlobalActionMap.bind( keyboard, "escape", exit );
     
     // Load and configure the toolbox.
     Sandbox.add( TamlRead("./gui/ToolboxDialog.gui.taml") );

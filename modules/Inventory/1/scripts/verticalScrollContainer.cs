@@ -842,7 +842,7 @@ function createVerticalScrollContainer(%profile)
 		NormalImage="Inventory:northArrowNormal";
 		HoverImage="Inventory:northArrowHover";
 		DownImage="Inventory:northArrowDown";
-		InactiveImage="Inventory:northArrowInactive";
+		InactiveImage="Inventory:northArrowNormal";
 		    normalImageCache="Inventory:northArrowNormal";
 	};
 	%scrollContainer.addGuiControl(%upButton);
@@ -888,7 +888,7 @@ function createVerticalScrollContainer(%profile)
 		NormalImage="Inventory:southArrowNormal";
 		HoverImage="Inventory:southArrowHover";
 		DownImage="Inventory:southArrowDown";
-		InactiveImage="Inventory:southArrowInactive";
+		InactiveImage="Inventory:southArrowNormal";
 		    normalImageCache="Inventory:southArrowNormal";
 	};
 	%scrollContainer.addGuiControl(%downButton);
