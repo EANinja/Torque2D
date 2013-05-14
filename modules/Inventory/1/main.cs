@@ -5,6 +5,7 @@ function Inventory::create( %this )
     
     // Load Inventory scripts.
     exec( "./scripts/Inventory.cs" );
+    exec( "./scripts/InventoryGui.cs" );
     exec( "./scripts/verticalScrollContainer.cs" );
         
     // Load GUI profiles.
