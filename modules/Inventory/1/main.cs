@@ -7,6 +7,7 @@ function Inventory::create( %this )
     exec( "./scripts/Inventory.cs" );
     exec( "./scripts/InventoryGui.cs" );
     exec( "./scripts/verticalScrollContainer.cs" );
+    exec( "./scripts/inventoryGridContainer.cs" );
         
     // Load GUI profiles.
     exec("./gui/guiProfiles.cs");

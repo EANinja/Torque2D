@@ -1,17 +1,21 @@
 //-----------------------------------------------------------------------------
-// Utility methods for VerticalScrollCtrl
+// Utility methods for InventoryGridCtrl
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Utility methods for InventoryGridCtrl
 //-----------------------------------------------------------------------------
 
 /// <summary> These adjust the scroll indicator arrow position relative to the 
 /// target control.
 /// </summary>
-$VerticalScrollCtrl::ScrollIndicatorYOffset = 2;
-$VerticalScrollCtrl::ScrollIndicatorXOffset = -3;
+$InventoryGridCtrl::ScrollIndicatorYOffset = 2;
+$InventoryGridCtrl::ScrollIndicatorXOffset = -3;
 /// <summary>
 /// This handles the scroll up button mouse down event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_UpBTN::onMouseDown(%this)
+function IGCcg_UpBTN::onMouseDown(%this)
 {
     cancel(%this.scrollScheduleID);
    
@@ -24,7 +28,7 @@ function Vscg_UpBTN::onMouseDown(%this)
 /// This handles the scroll up button mouse enter event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_UpBTN::onMouseEnter(%this)
+function IGCcg_UpBTN::onMouseEnter(%this)
 {
    %this.button.setNormalImage(%this.button.HoverImage);
 }
@@ -33,7 +37,7 @@ function Vscg_UpBTN::onMouseEnter(%this)
 /// This handles the scroll up button mouse leave event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_UpBTN::onMouseLeave(%this)
+function IGCcg_UpBTN::onMouseLeave(%this)
 {
    %this.button.setNormalImage(%this.button.normalImageCache);
 }
@@ -42,7 +46,7 @@ function Vscg_UpBTN::onMouseLeave(%this)
 /// This handles scrolling the contents of the container when the scroll up button is
 /// clicked and/or held down.
 /// </summary>
-function Vscg_UpBTN::scrollUp(%this)
+function IGCcg_UpBTN::scrollUp(%this)
 {
     %this.container.scrollPosition = %this.container.scrollCtrl.getScrollPositionY();
     %this.container.scrollCount = mRound(%this.container.scrollPosition / (%this.container.buttonHeight + %this.container.contentPane.rowHeight));
@@ -67,7 +71,7 @@ function Vscg_UpBTN::scrollUp(%this)
 /// This handles the scroll up button mouse up event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_UpBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
+function IGCcg_UpBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
 {
     %this.button.setNormalImage(%this.button.HoverImage);
     if (%this.scrollScheduleID == -1)
@@ -82,7 +86,7 @@ function Vscg_UpBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
 /// This handles the scroll down button mouse down event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_DownBTN::onMouseDown(%this)
+function IGCcg_DownBTN::onMouseDown(%this)
 {
     cancel(%this.scrollScheduleID);
    
@@ -95,7 +99,7 @@ function Vscg_DownBTN::onMouseDown(%this)
 /// This handles the scroll down button mouse enter event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_DownBTN::onMouseEnter(%this)
+function IGCcg_DownBTN::onMouseEnter(%this)
 {
    %this.button.setNormalImage(%this.button.HoverImage);
 }
@@ -104,7 +108,7 @@ function Vscg_DownBTN::onMouseEnter(%this)
 /// This handles the scroll down button mouse leave event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_DownBTN::onMouseLeave(%this)
+function IGCcg_DownBTN::onMouseLeave(%this)
 {
    %this.button.setNormalImage(%this.button.normalImageCache);
 }
@@ -113,7 +117,7 @@ function Vscg_DownBTN::onMouseLeave(%this)
 /// This handles scrolling the contents of the container down when the down button is 
 /// clicked and/or held down.
 /// </summary>
-function Vscg_DownBTN::scrollDown(%this)
+function IGCcg_DownBTN::scrollDown(%this)
 {
     %itemCount = %this.container.itemCount;
     %paneSize = %this.container.paneSize;
@@ -143,7 +147,7 @@ function Vscg_DownBTN::scrollDown(%this)
 /// This handles the scroll down button mouse up event.  It also sets the button
 /// image on the underlying button object.
 /// </summary>
-function Vscg_DownBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
+function IGCcg_DownBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
 {
    %this.button.setNormalImage(%this.button.HoverImage);
     if (%this.scrollScheduleID == -1)
@@ -157,7 +161,7 @@ function Vscg_DownBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount
 /// <summary>
 /// This clears the control's contents
 /// </summary>
-function VerticalScrollCtrl::clear(%this)
+function InventoryGridCtrl::clear(%this)
 {
     if (!isObject(%this.deletionSet))
         %this.deletionSet = new SimSet();
@@ -181,7 +185,7 @@ function VerticalScrollCtrl::clear(%this)
 /// This scrolls the control to the desired button
 /// </summary>
 /// <param name="index">The index of the desired button</param>
-function VerticalScrollCtrl::scrollToButton(%this, %index)
+function InventoryGridCtrl::scrollToButton(%this, %index)
 {
     if (%index < 0)
         %index = 0;
@@ -203,7 +207,7 @@ function VerticalScrollCtrl::scrollToButton(%this, %index)
 /// </summary>
 /// <param name="index">The index of the desired button</param>
 /// <return>Returns the vertical position of the button</return>
-function VerticalScrollCtrl::getButtonPosition(%this, %index)
+function InventoryGridCtrl::getButtonPosition(%this, %index)
 {
     if (%index < 0)
         %index = 0;
@@ -225,7 +229,7 @@ function VerticalScrollCtrl::getButtonPosition(%this, %index)
 /// </summary>
 /// <param name="index">The index of the desired button</param>
 /// <return>Returns the button at the specified index</return>
-function VerticalScrollCtrl::getButton(%this, %index)
+function InventoryGridCtrl::getButton(%this, %index)
 {
     if ( %index < 0 )
         %index = 0;
@@ -243,10 +247,10 @@ function VerticalScrollCtrl::getButton(%this, %index)
 /// contained within a parent control.
 /// </summary>
 /// <param name="guiControl">The GUI control to create the header from</param>
-function VerticalScrollCtrl::addHeader(%this, %guiControl)
+function InventoryGridCtrl::addHeader(%this, %guiControl)
 {
     // take the provided gui control and place it on a 
-    // VsDynamicButton in VsContentPane and assign it an index.
+    // IGCDynamicButton in IGCContentPane and assign it an index.
     if (%this.headerWidth $= "")
         %this.resizeCtrl = true;
     %this.headerCtrl = %guiControl;
@@ -268,10 +272,10 @@ function VerticalScrollCtrl::addHeader(%this, %guiControl)
 /// contained within a parent control.
 /// </summary>
 /// <param name="guiControl">The GUI control to create the footer from</param>
-function VerticalScrollCtrl::addFooter(%this, %guiControl)
+function InventoryGridCtrl::addFooter(%this, %guiControl)
 {
     // take the provided gui control and place it on a 
-    // VsDynamicButton in VsContentPane and assign it an index.
+    // IGCDynamicButton in IGCContentPane and assign it an index.
     if (%this.footerWidth $= "")
         %this.resizeCtrl = true;
     %this.footerCtrl = %guiControl;
@@ -302,10 +306,10 @@ function VerticalScrollCtrl::addFooter(%this, %guiControl)
 /// <param name="object">The object that contains the method to be called</param>
 /// <param name="handler">The method on %object to call to handle the button click</param>
 /// <param name="data">Additional information that needs to be passed on to %handler</param>
-function VerticalScrollCtrl::addButton(%this, %guiControl, %object, %handler, %data)
+function InventoryGridCtrl::addButton(%this, %guiControl, %object, %handler, %data)
 {
     // take the provided gui control and place it on a 
-    // VsDynamicButton in VsContentPane and assign it an index.
+    // IGCDynamicButton in IGCContentPane and assign it an index.
     if (%this.buttonWidth $= "")
         %this.resizeCtrl = true;
 
@@ -348,7 +352,7 @@ function VerticalScrollCtrl::addButton(%this, %guiControl, %object, %handler, %d
 
 	%clickEvent = new GuiMouseEventCtrl()
 	{
-	    class="VsDynamicButton";
+	    class="IGCDynamicButton";
 		canSaveDynamicFields="0";
 		isContainer="0";
 		Profile="GuiTransparentProfile";
@@ -434,7 +438,7 @@ function VerticalScrollCtrl::addButton(%this, %guiControl, %object, %handler, %d
     }
 }
 
-function VerticalScrollCtrl::onAdd(%this)
+function InventoryGridCtrl::onAdd(%this)
 {
     if (isObject(%this.getParent))
     {
@@ -444,7 +448,7 @@ function VerticalScrollCtrl::onAdd(%this)
     }
 }
 
-function VerticalScrollCtrl::onSleep(%this)
+function InventoryGridCtrl::onSleep(%this)
 {
     if (isObject(%this.indicatorArrow))
     {
@@ -452,7 +456,7 @@ function VerticalScrollCtrl::onSleep(%this)
     }
 }
 
-function VerticalScrollCtrl::onRemove(%this)
+function InventoryGridCtrl::onRemove(%this)
 {
     if (isObject(%this.indicatorArrow))
     {
@@ -464,7 +468,7 @@ function VerticalScrollCtrl::onRemove(%this)
 /// This function sets the container to add buttons without resizing the control.
 /// </summary>
 /// <param name="flag">The desired container batch add state</param>
-function VerticalScrollCtrl::toggleBatch(%this, %flag)
+function InventoryGridCtrl::toggleBatch(%this, %flag)
 {
     %this.batch = %flag;
     if ( %this.scrollCallbacks && %flag )
@@ -489,7 +493,7 @@ function VerticalScrollCtrl::toggleBatch(%this, %flag)
     }
 }
 
-function VerticalScrollCtrl::resizeContainer(%this)
+function InventoryGridCtrl::resizeContainer(%this)
 {
     %parent = %this.getParent();
     %parentWidth = %parent.Extent.x - 5;
@@ -526,7 +530,7 @@ function VerticalScrollCtrl::resizeContainer(%this)
     %this.scrollCtrl.resize(5, %scrollPosY, %scrollContainerWidth - 10, %scrollLength);
 }
 
-function VerticalScrollCtrl::resizeContentPane(%this)
+function InventoryGridCtrl::resizeContentPane(%this)
 {
     %count = %this.contentPane.getCount();
     %spacing = %this.contentPane.rowSpacing;
@@ -548,7 +552,7 @@ function VerticalScrollCtrl::resizeContentPane(%this)
 /// This sets the spacing between buttons in the container
 /// </summary>
 /// <param name="spacing">The desired space in pixels between buttons</param>
-function VerticalScrollCtrl::setSpacing(%this, %spacing)
+function InventoryGridCtrl::setSpacing(%this, %spacing)
 {
     %this.contentPane.rowSpacing = %spacing;
 }
@@ -557,7 +561,7 @@ function VerticalScrollCtrl::setSpacing(%this, %spacing)
 /// This sets a profile to use for highlighting the currently selected button.
 /// </summary>
 /// <param name="profile">The profile to use for the selected button.</param>
-function VerticalScrollCtrl::setHighlightProfile(%this, %profile)
+function InventoryGridCtrl::setHighlightProfile(%this, %profile)
 {
     %this.highlightProfile = %profile;
 }
@@ -566,7 +570,7 @@ function VerticalScrollCtrl::setHighlightProfile(%this, %profile)
 /// This sets an asset ID for the selected item scroll position indicator.
 /// </summary>
 /// <param name="profile">The asset ID to use for the indicator arrow.</param>
-function VerticalScrollCtrl::setIndicatorImage(%this, %assetID)
+function InventoryGridCtrl::setIndicatorImage(%this, %assetID)
 {
     %this.indicatorImage = %assetID;
 }
@@ -576,7 +580,7 @@ function VerticalScrollCtrl::setIndicatorImage(%this, %assetID)
 /// added to the container sets the base button profile.
 /// </summary>
 /// <param name="profile">The profile to use for the selected button</param>
-function VerticalScrollCtrl::setNormalProfile(%this, %profile)
+function InventoryGridCtrl::setNormalProfile(%this, %profile)
 {
     %this.buttonProfile = %profile;
 }
@@ -585,7 +589,7 @@ function VerticalScrollCtrl::setNormalProfile(%this, %profile)
 /// This gets the current container button spacing
 /// </summary>
 /// <return>Returns the current button spacing</return>
-function VerticalScrollCtrl::getSpacing(%this)
+function InventoryGridCtrl::getSpacing(%this)
 {
     if (%this.contentPane.rowSpacing !$= "")
         return %this.contentPane.rowSpacing;
@@ -597,7 +601,7 @@ function VerticalScrollCtrl::getSpacing(%this)
 /// This "clicks" the desired contained button.
 /// </summary>
 /// <param name="index">The index of the desired button</param>
-function VerticalScrollCtrl::setSelected(%this, %index)
+function InventoryGridCtrl::setSelected(%this, %index)
 {
     if (%index < 0 || %index > %this.contentPane.getCount())
         return;
@@ -622,7 +626,7 @@ function VerticalScrollCtrl::setSelected(%this, %index)
 /// This gets the number of buttons in the container.
 /// </summary>
 /// <return>Returns the number of buttons in the content pane.</return>
-function VerticalScrollCtrl::getCount(%this)
+function InventoryGridCtrl::getCount(%this)
 {
     return %this.contentPane.getCount();
 }
@@ -633,7 +637,7 @@ function VerticalScrollCtrl::getCount(%this)
 /// The default is 0.3.
 /// </summary>
 /// <param name="multiplier">The fraction of the current button height to scroll.</param>
-function VerticalScrollCtrl::setScrollSpeed(%this, %multiplier)
+function InventoryGridCtrl::setScrollSpeed(%this, %multiplier)
 {
     %this.scrollSpeed = %multiplier;
 }
@@ -642,7 +646,7 @@ function VerticalScrollCtrl::setScrollSpeed(%this, %multiplier)
 /// Sets the repeat rate for continuous scrolling in milliseconds.  The default is 100 ms.
 /// </summary>
 /// <param name="rate">Milliseconds between scroll actions.</param>
-function VerticalScrollCtrl::setScrollRepeat(%this, %rate)
+function InventoryGridCtrl::setScrollRepeat(%this, %rate)
 {
     %this.scrollRepeat = %rate;
 }
@@ -651,7 +655,7 @@ function VerticalScrollCtrl::setScrollRepeat(%this, %rate)
 /// Enables or disables onScroll callbacks.
 /// </summary>
 /// <param name="%flag">Set to true to enable onScroll callbacks, false to disable them.</param>
-function VerticalScrollCtrl::setScrollCallbacks(%this, %flag)
+function InventoryGridCtrl::setScrollCallbacks(%this, %flag)
 {
     %this.scrollCallbacks = %flag;
     %this.scrollCtrl.setUseScrollEvents(%flag);
@@ -662,7 +666,7 @@ function VerticalScrollCtrl::setScrollCallbacks(%this, %flag)
 /// of a VerticalScrollContainer to have its own way of handling this callback.
 /// </summary>
 /// <param name="funcName">The method that the onScroll() callback will pass control to.</param>
-function VerticalScrollCtrl::setScrollHandler(%this, %funcName)
+function InventoryGridCtrl::setScrollHandler(%this, %funcName)
 {
     %this.scrollCtrl.scrollHandler = %funcName;
 }
@@ -672,7 +676,7 @@ function VerticalScrollCtrl::setScrollHandler(%this, %funcName)
 /// specified index.
 /// </summary>
 /// <param name="index">The index of the item to point to.</param>
-function VerticalScrollCtrl::setIndicatorToButton(%this, %index)
+function InventoryGridCtrl::setIndicatorToButton(%this, %index)
 {
     %this.selectedButton = %this.getButton(%index);
     %this.updateIndicatorPosition();
@@ -684,7 +688,7 @@ function VerticalScrollCtrl::setIndicatorToButton(%this, %index)
 /// </summary>
 /// <param name="childPos">Position information passed from the onScroll() callback.</param>
 /// <param name="childRelPos">Position information passed from the onScroll() callback.</param>
-function VerticalScrollCtrl::updateIndicatorPosition(%this, %childPos, %childRelPos)
+function InventoryGridCtrl::updateIndicatorPosition(%this, %childPos, %childRelPos)
 {
     if ( %childPos $= "" )
         %childPos = %this.scrollCtrl.childPos;
@@ -719,19 +723,19 @@ function VerticalScrollCtrl::updateIndicatorPosition(%this, %childPos, %childRel
     %basePos = %this.getParent().Position;
     %containerPos = %this.Position.x + %basePos.x SPC %this.Position.y + %basePos.y;
     %scrollContainerPos = %containerPos.x + %this.scrollContainer.Position.x SPC %containerPos.y + %this.scrollContainer.Position.y;
-    %scrollOffset = %this.scrollContainer.Extent.x + %scrollContainerPos.x + $VerticalScrollCtrl::ScrollIndicatorXOffset;
+    %scrollOffset = %this.scrollContainer.Extent.x + %scrollContainerPos.x + $InventoryGridCtrl::ScrollIndicatorXOffset;
 
     if ( isObject(%this.selectedButton) )
         %button = %this.getButton(%this.selectedButton.index);
     else
         %button = %this.getButton(0);
         
-    %buttonOffset = %button.Position.y + (%button.Extent.y / 2) + %childPos.y + $VerticalScrollCtrl::ScrollIndicatorYOffset;
+    %buttonOffset = %button.Position.y + (%button.Extent.y / 2) + %childPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
     %yPos = %scrollContainerPos.y + %buttonOffset;
-    if (%yPos < %scrollContainerPos.y + $VerticalScrollCtrl::ScrollIndicatorYOffset)
-        %yPos = %scrollContainerPos.y + $VerticalScrollCtrl::ScrollIndicatorYOffset;
-    if (%yPos > (%scrollContainerPos.y + %this.scrollCtrl.Extent.y) + $VerticalScrollCtrl::ScrollIndicatorYOffset)
-        %yPos = %scrollContainerPos.y + %this.scrollCtrl.Extent.y + $VerticalScrollCtrl::ScrollIndicatorYOffset;
+    if (%yPos < %scrollContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset)
+        %yPos = %scrollContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
+    if (%yPos > (%scrollContainerPos.y + %this.scrollCtrl.Extent.y) + $InventoryGridCtrl::ScrollIndicatorYOffset)
+        %yPos = %scrollContainerPos.y + %this.scrollCtrl.Extent.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
     %this.indicatorArrow.setPosition(%scrollOffset, %yPos);
 }
 
@@ -743,7 +747,7 @@ function VerticalScrollCtrl::updateIndicatorPosition(%this, %childPos, %childRel
 /// <param name="childRelStart">The relative position of the scroll control's 'contained' control before scrolling.</param>
 /// <param name="childPos">The position of the scroll control's 'contained' control after scrolling.</param>
 /// <param name="childRelPos">The relative position of the scroll control's 'contained' control after scrolling.</param>
-function VsScrollCtrl::onScroll(%this, %childStart, %childRelStart, %childPos, %childRelPos)
+function IGCScrollCtrl::onScroll(%this, %childStart, %childRelStart, %childPos, %childRelPos)
 {
     %this.childPos = %childPos;
     %this.childRelPos = %childRelPos;
@@ -760,7 +764,7 @@ function VsScrollCtrl::onScroll(%this, %childStart, %childRelStart, %childPos, %
 /// the object has the assigned method, then calls that method with the assigned
 /// data.
 /// </summary>
-function VsDynamicButton::onMouseUp(%this)
+function IGCDynamicButton::onMouseUp(%this)
 {
     if ( %this.container.selectedButton !$= "" && isObject(%this.container.selectedButton) )
         %this.container.selectedButton.setProfile(%this.container.buttonProfile);
@@ -768,11 +772,8 @@ function VsDynamicButton::onMouseUp(%this)
     %this.button.setProfile(%this.container.highlightProfile);
     %this.container.updateIndicatorPosition();
     %object = %this.object;
-    if ( isObject(%object) )
-    {
-        if (%object.isMethod(%this.handler))
-            %object.call(%this.handler, %this.data);
-    }
+    if (%object.isMethod(%this.handler))
+        %object.call(%this.handler, %this.data);
 }
 
 /// <summary>
@@ -780,12 +781,13 @@ function VsDynamicButton::onMouseUp(%this)
 /// reference to it.  Use the returned reference to work with the container.
 /// </summary>
 /// <param name="profile">Profile for the scroll container.  Default is GuiSunkenContainerProfile</param>
-/// <return>A new VerticalScrollCtrl container object</return>
-function createVerticalScrollContainer(%profile)
+/// <param name="page">Flag to set if the container can have multiple pages.</param>
+/// <return>A new InventoryGridCtrl container object</return>
+function createInventoryGridContainer(%profile, %page)
 {
     %container = new GuiControl()
     {
-        class="VerticalScrollCtrl";
+        class="InventoryGridCtrl";
         canSaveDynamicFields="0";
         isContainer="1";
         Profile="GuiTransparentProfile";
@@ -803,7 +805,7 @@ function createVerticalScrollContainer(%profile)
     if ( %containerProfile $= "" )
         %containerProfile = "GuiTransparentProfile";
 
-    %scrollContainer = new GuiControl()
+    %pageContainer = new GuiControl()
     {
         canSaveDynamicFields="0";
         isContainer="1";
@@ -817,8 +819,8 @@ function createVerticalScrollContainer(%profile)
         Visible="1";
         hovertime="1000";
     };
-    %container.addGuiControl(%scrollContainer);
-    %container.scrollContainer = %scrollContainer;
+    %container.addGuiControl(%pageContainer);
+    %container.scrollContainer = %pageContainer;
 
 	%upButton = new GuiImageButtonCtrl()
 	{
@@ -843,11 +845,11 @@ function createVerticalScrollContainer(%profile)
 		InactiveImage="Inventory:northArrowNormal";
 		    normalImageCache="Inventory:northArrowNormal";
 	};
-	%scrollContainer.addGuiControl(%upButton);
+	%pageContainer.addGuiControl(%upButton);
 
 	%upClickEvent = new GuiMouseEventCtrl()
 	{
-		class="Vscg_UpBTN";
+		class="IGCcg_UpBTN";
 		canSaveDynamicFields="0";
 		isContainer="0";
 		Profile="GuiTransparentProfile";
@@ -863,7 +865,7 @@ function createVerticalScrollContainer(%profile)
             button = %upButton;
 		    container = %container;
 	};
-	%scrollContainer.addGuiControl(%upClickEvent);
+	%pageContainer.addGuiControl(%upClickEvent);
 	%container.upButton = %upClickEvent;
 
 	%downButton = new GuiImageButtonCtrl()
@@ -889,11 +891,11 @@ function createVerticalScrollContainer(%profile)
 		InactiveImage="Inventory:southArrowNormal";
 		    normalImageCache="Inventory:southArrowNormal";
 	};
-	%scrollContainer.addGuiControl(%downButton);
+	%pageContainer.addGuiControl(%downButton);
 
 	%downClickEvent = new GuiMouseEventCtrl()
 	{
-		class="Vscg_DownBTN";
+		class="IGCcg_DownBTN";
 		canSaveDynamicFields="0";
 		isContainer="0";
 		Profile="GuiTransparentProfile";
@@ -909,12 +911,12 @@ function createVerticalScrollContainer(%profile)
             button = %downButton;
 		    container = %container;
 	};
-	%scrollContainer.addGuiControl(%downClickEvent);
+	%pageContainer.addGuiControl(%downClickEvent);
 	%container.downButton = %downClickEvent;
 
 	%scroll = new GuiScrollCtrl()
 	{
-		class="VsScrollCtrl";
+		class="IGCScrollCtrl";
 		canSaveDynamicFields="0";
 		isContainer="1";
 		Profile="GuiTransparentScrollProfile";
@@ -932,13 +934,13 @@ function createVerticalScrollContainer(%profile)
 		constantThumbHeight="0";
 		childMargin="0 0";
 	};
-	%scrollContainer.addGuiControl(%scroll);
+	%pageContainer.addGuiControl(%scroll);
 	%container.scrollCtrl = %scroll;
 	%scroll.container = %container;
 	
     %contentPane = new GuiDynamicCtrlArrayControl()
     {
-        class="VsContent";
+        class="IGCContent";
         canSaveDynamicFields="0";
         isContainer="1";
         Profile="GuiTransparentProfile";
