@@ -713,9 +713,11 @@ function VerticalScrollCtrl::updateIndicatorPosition(%this, %childPos, %childRel
             Image=%this.indicatorImage;
         };
         AssetDatabase.releaseAsset(%this.indicatorImage);
-        EditorShellGui.add(%this.indicatorArrow);
+        if (isObject(EditorShellGui))
+            EditorShellGui.add(%this.indicatorArrow);
     }
-    EditorShellGui.pushToBack(%this.indicatorArrow);
+    if (isObject(EditorShellGui))
+        EditorShellGui.pushToBack(%this.indicatorArrow);
     %basePos = %this.getParent().Position;
     %containerPos = %this.Position.x + %basePos.x SPC %this.Position.y + %basePos.y;
     %scrollContainerPos = %containerPos.x + %this.scrollContainer.Position.x SPC %containerPos.y + %this.scrollContainer.Position.y;
@@ -732,7 +734,8 @@ function VerticalScrollCtrl::updateIndicatorPosition(%this, %childPos, %childRel
         %yPos = %scrollContainerPos.y + $VerticalScrollCtrl::ScrollIndicatorYOffset;
     if (%yPos > (%scrollContainerPos.y + %this.scrollCtrl.Extent.y) + $VerticalScrollCtrl::ScrollIndicatorYOffset)
         %yPos = %scrollContainerPos.y + %this.scrollCtrl.Extent.y + $VerticalScrollCtrl::ScrollIndicatorYOffset;
-    %this.indicatorArrow.setPosition(%scrollOffset, %yPos);
+    if (isObject(%this.indicatorArrow))
+        %this.indicatorArrow.setPosition(%scrollOffset, %yPos);
 }
 
 /// <summary>
