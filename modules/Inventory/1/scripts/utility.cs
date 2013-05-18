@@ -97,18 +97,3 @@ function getCountString(%input, %count)
     
     return %output;
 }
-
-function cleanTemporaryAssets()
-{
-    //%query = new AssetQuery();
-    //%count = AssetDatabase.findAssetCategory(%query, "temporary");
-    //for (%i = 0; %i < %count; %i++)
-    //{
-        //%asset = %query.getAsset(%i);
-        //%file = AssetDatabase.getAssetFilePath(%asset);
-        //AssetDatabase.releaseAsset(%asset);
-        //AssetDatabase.removeSingleDeclaredAsset(%asset);
-        //if ( isFile( %file ) )
-            //fileDelete(%file);
-    //}
-}

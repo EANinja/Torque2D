@@ -11,152 +11,6 @@
 /// </summary>
 $InventoryGridCtrl::ScrollIndicatorYOffset = 2;
 $InventoryGridCtrl::ScrollIndicatorXOffset = -3;
-/// <summary>
-/// This handles the scroll up button mouse down event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_UpBTN::onMouseDown(%this)
-{
-    cancel(%this.scrollScheduleID);
-   
-    %this.scrollScheduleID = -1;
-    %this.scrollUp();
-    %this.button.setNormalImage(%this.button.DownImage);
-}
-
-/// <summary>
-/// This handles the scroll up button mouse enter event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_UpBTN::onMouseEnter(%this)
-{
-   %this.button.setNormalImage(%this.button.HoverImage);
-}
-
-/// <summary>
-/// This handles the scroll up button mouse leave event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_UpBTN::onMouseLeave(%this)
-{
-   %this.button.setNormalImage(%this.button.normalImageCache);
-}
-
-/// <summary>
-/// This handles scrolling the contents of the container when the scroll up button is
-/// clicked and/or held down.
-/// </summary>
-function IGCcg_UpBTN::scrollUp(%this)
-{
-    %this.container.scrollPosition = %this.container.scrollCtrl.getScrollPositionY();
-    %this.container.scrollCount = mRound(%this.container.scrollPosition / (%this.container.buttonHeight + %this.container.contentPane.rowHeight));
-    %this.container.scrollCount --;
-    if (%this.container.scrollCount < 0)
-    {
-        %this.container.scrollCount = 0;
-        %this.container.scrollCtrl.setScrollPosition(0, 0);
-        cancel(%this.scrollScheduleID);
-        %this.scrollUpScheduleID = -1;
-        return;
-    }
-    %this.container.scrollPosition -= (%this.container.buttonHeight + %this.container.contentPane.rowSpacing) * %this.container.scrollSpeed;
-    if (%this.container.scrollPosition < 0)
-        %this.container.scrollPosition = 0;
-    %this.container.scrollCtrl.setScrollPosition(0, %this.container.scrollPosition);
-
-   %this.scrollScheduleID = %this.schedule(%this.container.scrollRepeat, scrollUp);
-}
-
-/// <summary>
-/// This handles the scroll up button mouse up event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_UpBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
-{
-    %this.button.setNormalImage(%this.button.HoverImage);
-    if (%this.scrollScheduleID == -1)
-        return;
-
-    cancel(%this.scrollScheduleID);
-   
-    %this.scrollScheduleID = -1;
-}
-
-/// <summary>
-/// This handles the scroll down button mouse down event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_DownBTN::onMouseDown(%this)
-{
-    cancel(%this.scrollScheduleID);
-   
-    %this.scrollScheduleID = -1;
-    %this.scrollDown();
-    %this.button.setNormalImage(%this.button.DownImage);
-}
-
-/// <summary>
-/// This handles the scroll down button mouse enter event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_DownBTN::onMouseEnter(%this)
-{
-   %this.button.setNormalImage(%this.button.HoverImage);
-}
-
-/// <summary>
-/// This handles the scroll down button mouse leave event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_DownBTN::onMouseLeave(%this)
-{
-   %this.button.setNormalImage(%this.button.normalImageCache);
-}
-
-/// <summary>
-/// This handles scrolling the contents of the container down when the down button is 
-/// clicked and/or held down.
-/// </summary>
-function IGCcg_DownBTN::scrollDown(%this)
-{
-    %itemCount = %this.container.itemCount;
-    %paneSize = %this.container.paneSize;
-    %spacing = %this.container.contentPane.rowSpacing;
-    %buttonHeight = %this.container.contentPane.rowSize;
-    %maxScroll = (%buttonHeight * %itemCount) + (%itemCount * %spacing) - %paneSize;
-    %this.container.scrollPosition = %this.container.scrollCtrl.getScrollPositionY();
-    %this.container.scrollCount = mRound(%this.container.scrollPosition / (%this.container.buttonHeight + %this.container.contentPane.rowHeight));
-    %this.container.scrollCount ++;
-    if (%this.container.scrollCount > %this.container.itemCount)
-    {
-        %this.container.scrollCount = %this.container.itemCount;
-        %this.container.scrollCtrl.setScrollPosition(0, %maxScroll);
-        cancel(%this.scrollScheduleID);
-        %this.scrollScheduleID = -1;
-        return;
-    }
-    %this.container.scrollPosition += (%buttonHeight + %spacing) * %this.container.scrollSpeed;
-    if (%this.container.scrollPosition > %maxScroll)
-        %this.container.scrollPosition = %maxScroll;
-    %this.container.scrollCtrl.setScrollPosition(0, %this.container.scrollPosition);
-
-   %this.scrollScheduleID = %this.schedule(%this.container.scrollRepeat, scrollDown);
-}
-
-/// <summary>
-/// This handles the scroll down button mouse up event.  It also sets the button
-/// image on the underlying button object.
-/// </summary>
-function IGCcg_DownBTN::onMouseUp(%this, %modifier, %mousePoint, %mouseClickCount)
-{
-   %this.button.setNormalImage(%this.button.HoverImage);
-    if (%this.scrollScheduleID == -1)
-        return;
-
-    cancel(%this.scrollScheduleID);
-   
-    %this.scrollScheduleID = -1;
-}
 
 /// <summary>
 /// This clears the control's contents
@@ -495,7 +349,7 @@ function InventoryGridCtrl::toggleBatch(%this, %flag)
 
 function InventoryGridCtrl::resizeContainer(%this)
 {
-    %parent = %this.getParent();
+    %parent = %this.parentCtrl;
     %parentWidth = %parent.Extent.x - 5;
     %parentHeight = %parent.Extent.y - 14;
     %buttonWidth = %this.buttonWidth;
@@ -509,25 +363,12 @@ function InventoryGridCtrl::resizeContainer(%this)
     if (isObject(%this.footerCtrl))
         %this.footerCtrl.setPosition(0, %parentHeight - %this.footerHeight - 18);
 
-    %scrollContainerWidth = %this.Extent.x - 32;
-    %scrollContainerPosX = %this.Position.x + 18;
-    %scrollContainerHeight = %this.Extent.y - %this.headerHeight - %this.footerHeight - 32;
-    %scrollContainerPosY = %this.Position.y + 18 + %this.headerHeight;
+    %contentContainerWidth = %this.Extent.x - 32;
+    %contentContainerPosX = %this.Position.x + 18;
+    %contentContainerHeight = %this.Extent.y - %this.headerHeight - %this.footerHeight - 32;
+    %contentContainerPosY = %this.Position.y + 18 + %this.headerHeight;
 
-    %this.scrollContainer.resize(%scrollContainerPosX, %scrollContainerPosY, %scrollContainerWidth, %scrollContainerHeight);
-
-    %this.upButton.resize(4, 6, %scrollContainerWidth - 8, %this.upButton.Extent.y);
-    %btnPosX = (%this.upButton.Extent.x / 2) - (%this.upButton.button.Extent.x / 2) + 4;
-    %this.upButton.button.setPosition(%btnPosX, %this.upButton.Position.y);
-
-    %this.downButton.resize(4, %scrollContainerHeight - %this.downButton.Extent.y - 3, %scrollContainerWidth - 8, %this.downButton.Extent.y);
-    %btnPosX = (%this.downButton.Extent.x / 2) - (%this.downButton.button.Extent.x / 2) + 4;
-    %this.downButton.button.setPosition(%btnPosX, %this.downButton.Position.y);
-
-    %scrollPosY = %this.upButton.Position.y + %this.upButton.Extent.y + 2;
-    %scrollLength = %this.scrollContainer.Extent.y - (%this.upButton.Extent.y * 2) - 12;
-
-    %this.scrollCtrl.resize(5, %scrollPosY, %scrollContainerWidth - 10, %scrollLength);
+    %this.contentContainer.resize(%contentContainerPosX, %contentContainerPosY, %contentContainerWidth, %contentContainerHeight);
 }
 
 function InventoryGridCtrl::resizeContentPane(%this)
@@ -551,10 +392,54 @@ function InventoryGridCtrl::resizeContentPane(%this)
 /// <summary>
 /// This sets the spacing between buttons in the container
 /// </summary>
-/// <param name="spacing">The desired space in pixels between buttons</param>
+/// <param name="spacing">The desired space in pixels between buttons - "x y"</param>
 function InventoryGridCtrl::setSpacing(%this, %spacing)
 {
-    %this.contentPane.rowSpacing = %spacing;
+    %this.contentPane.rowSpacing = %spacing.x;
+    %this.contentPane.colSpacing = %spacing.y;
+}
+
+/// <summary>
+/// This sets the background image to use for the container "cells"
+/// </summary>
+/// <param name="image">The image asset to use for the background</param>
+function InventoryGridCtrl::setCellBackground(%this, %image)
+{
+    %this.backgroundImage = %image;
+    %asset = AssetDatabase.acquireAsset(%image);
+    %size = %asset.getImageSize();
+    AssetDatabase.releaseAsset(%asset);
+    %this.contentPane.colSize = %size.x;
+    %this.contentPane.rowSize = %size.y;
+    %panelWidth = %this.Extent.x - 32;
+    %panelHeight = %this.Extent.y - %this.headerHeight - %this.footerHeight - 32;
+    %colCount = mFloor(%panelWidth / (%size.x + %this.contentPane.colSpacing));
+    %rowCount = mFloor(%panelHeight/ (%size.y + %this.contentPane.rowSpacing));
+    %contentWidth = %colCount * (%size.x + %this.contentPane.colSpacing);
+    %contentHeight = %rowCount * (%size.y + %this.contentPane.rowSpacing);
+    %position = ((%panelWidth - %contentWidth) / 2) SPC ((%panelHeight - %contentHeight) / 2);
+    %position.x += 18;
+    %position.y += 18;
+    %this.contentPane.setPosition(%position.x, %position.y);
+    %this.contentPane.colCount = %colCount;
+    for ( %i = 0; %i < %colCount; %i++)
+    {
+        for ( %j = 0; %j < %rowCount; %j++)
+        {
+            %sprite = new GuiSpriteCtrl()
+            {
+                Profile="InventoryDefaultProfile";
+                HorizSizing="right";
+                VertSizing="bottom";
+                Extent=%size;
+                MinExtent=%size;
+                Visible="1";
+                Image = %image;
+            };
+            %this.contentPane.add(%sprite);
+        }
+    }
+    %this.resizeContainer();
 }
 
 /// <summary>
@@ -663,7 +548,7 @@ function InventoryGridCtrl::setScrollCallbacks(%this, %flag)
 
 /// <summary>
 /// This is to set the handler for scrollCtrl's onScroll callback.  This is to allow any given instance
-/// of a VerticalScrollContainer to have its own way of handling this callback.
+/// of a VerticalcontentContainer to have its own way of handling this callback.
 /// </summary>
 /// <param name="funcName">The method that the onScroll() callback will pass control to.</param>
 function InventoryGridCtrl::setScrollHandler(%this, %funcName)
@@ -722,8 +607,8 @@ function InventoryGridCtrl::updateIndicatorPosition(%this, %childPos, %childRelP
     EditorShellGui.pushToBack(%this.indicatorArrow);
     %basePos = %this.getParent().Position;
     %containerPos = %this.Position.x + %basePos.x SPC %this.Position.y + %basePos.y;
-    %scrollContainerPos = %containerPos.x + %this.scrollContainer.Position.x SPC %containerPos.y + %this.scrollContainer.Position.y;
-    %scrollOffset = %this.scrollContainer.Extent.x + %scrollContainerPos.x + $InventoryGridCtrl::ScrollIndicatorXOffset;
+    %contentContainerPos = %containerPos.x + %this.contentContainer.Position.x SPC %containerPos.y + %this.contentContainer.Position.y;
+    %scrollOffset = %this.contentContainer.Extent.x + %contentContainerPos.x + $InventoryGridCtrl::ScrollIndicatorXOffset;
 
     if ( isObject(%this.selectedButton) )
         %button = %this.getButton(%this.selectedButton.index);
@@ -731,11 +616,11 @@ function InventoryGridCtrl::updateIndicatorPosition(%this, %childPos, %childRelP
         %button = %this.getButton(0);
         
     %buttonOffset = %button.Position.y + (%button.Extent.y / 2) + %childPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
-    %yPos = %scrollContainerPos.y + %buttonOffset;
-    if (%yPos < %scrollContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset)
-        %yPos = %scrollContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
-    if (%yPos > (%scrollContainerPos.y + %this.scrollCtrl.Extent.y) + $InventoryGridCtrl::ScrollIndicatorYOffset)
-        %yPos = %scrollContainerPos.y + %this.scrollCtrl.Extent.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
+    %yPos = %contentContainerPos.y + %buttonOffset;
+    if (%yPos < %contentContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset)
+        %yPos = %contentContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
+    if (%yPos > (%contentContainerPos.y + %this.scrollCtrl.Extent.y) + $InventoryGridCtrl::ScrollIndicatorYOffset)
+        %yPos = %contentContainerPos.y + %this.scrollCtrl.Extent.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
     %this.indicatorArrow.setPosition(%scrollOffset, %yPos);
 }
 
@@ -783,7 +668,7 @@ function IGCDynamicButton::onMouseUp(%this)
 /// <param name="profile">Profile for the scroll container.  Default is GuiSunkenContainerProfile</param>
 /// <param name="page">Flag to set if the container can have multiple pages.</param>
 /// <return>A new InventoryGridCtrl container object</return>
-function createInventoryGridContainer(%profile, %page)
+function createInventoryGridContainer(%requestor, %profile, %page)
 {
     %container = new GuiControl()
     {
@@ -799,6 +684,7 @@ function createInventoryGridContainer(%profile, %page)
         canSave="1";
         Visible="1";
         hovertime="1000";
+            parentCtrl=%requestor;
     };
 
     %containerProfile = (%profile !$= "" ? %profile : "GuiSunkenContainerProfile");
@@ -820,124 +706,8 @@ function createInventoryGridContainer(%profile, %page)
         hovertime="1000";
     };
     %container.addGuiControl(%pageContainer);
-    %container.scrollContainer = %pageContainer;
+    %container.contentContainer = %pageContainer;
 
-	%upButton = new GuiImageButtonCtrl()
-	{
-		canSaveDynamicFields="0";
-		isContainer="0";
-		Profile="GuiTransparentProfile";
-		HorizSizing="left";
-		VertSizing="top";
-		Position="0 0";
-		Extent="69 23";
-		MinExtent="8 2";
-		canSave="1";
-		Visible="1";
-		hovertime="1000";
-		groupNum="-1";
-		buttonType="PushButton";
-		useMouseEvents="1";
-		isLegacyVersion="0";
-		NormalImage="Inventory:northArrowNormal";
-		HoverImage="Inventory:northArrowHover";
-		DownImage="Inventory:northArrowDown";
-		InactiveImage="Inventory:northArrowNormal";
-		    normalImageCache="Inventory:northArrowNormal";
-	};
-	%pageContainer.addGuiControl(%upButton);
-
-	%upClickEvent = new GuiMouseEventCtrl()
-	{
-		class="IGCcg_UpBTN";
-		canSaveDynamicFields="0";
-		isContainer="0";
-		Profile="GuiTransparentProfile";
-		HorizSizing="left";
-		VertSizing="top";
-		Position="0 0";
-		Extent="140 23";
-		MinExtent="8 2";
-		canSave="1";
-		Visible="1";
-		hovertime="1000";
-		groupNum="-1";
-            button = %upButton;
-		    container = %container;
-	};
-	%pageContainer.addGuiControl(%upClickEvent);
-	%container.upButton = %upClickEvent;
-
-	%downButton = new GuiImageButtonCtrl()
-	{
-		canSaveDynamicFields="0";
-		isContainer="0";
-		Profile="GuiTransparentProfile";
-		HorizSizing="left";
-		VertSizing="top";
-		Position="0 505";
-		Extent="69 23";
-		MinExtent="8 2";
-		canSave="1";
-		Visible="1";
-		hovertime="1000";
-		groupNum="-1";
-		buttonType="PushButton";
-		useMouseEvents="1";
-		isLegacyVersion="0";
-		NormalImage="Inventory:southArrowNormal";
-		HoverImage="Inventory:southArrowHover";
-		DownImage="Inventory:southArrowDown";
-		InactiveImage="Inventory:southArrowNormal";
-		    normalImageCache="Inventory:southArrowNormal";
-	};
-	%pageContainer.addGuiControl(%downButton);
-
-	%downClickEvent = new GuiMouseEventCtrl()
-	{
-		class="IGCcg_DownBTN";
-		canSaveDynamicFields="0";
-		isContainer="0";
-		Profile="GuiTransparentProfile";
-		HorizSizing="left";
-		VertSizing="top";
-		Position="0 505";
-		Extent="140 23";
-		MinExtent="8 2";
-		canSave="1";
-		Visible="1";
-		hovertime="1000";
-		groupNum="-1";
-            button = %downButton;
-		    container = %container;
-	};
-	%pageContainer.addGuiControl(%downClickEvent);
-	%container.downButton = %downClickEvent;
-
-	%scroll = new GuiScrollCtrl()
-	{
-		class="IGCScrollCtrl";
-		canSaveDynamicFields="0";
-		isContainer="1";
-		Profile="GuiTransparentScrollProfile";
-		HorizSizing="left";
-		VertSizing="top";
-		Position="0 53";
-		Extent="140 444";
-		MinExtent="8 2";
-		canSave="1";
-		Visible="1";
-		hovertime="1000";
-		willFirstRespond="1";
-		hScrollBar="alwaysOff";
-		vScrollBar="alwaysOff";
-		constantThumbHeight="0";
-		childMargin="0 0";
-	};
-	%pageContainer.addGuiControl(%scroll);
-	%container.scrollCtrl = %scroll;
-	%scroll.container = %container;
-	
     %contentPane = new GuiDynamicCtrlArrayControl()
     {
         class="IGCContent";
@@ -958,11 +728,9 @@ function createInventoryGridContainer(%profile, %page)
         rowSpacing="0";
         colSpacing="0";
     };
-    %scroll.addGuiControl(%contentPane);
+    %container.addGuiControl(%contentPane);
     %container.contentPane = %contentPane;
 
-    %container.scrollSpeed = 0.3;
-    %container.scrollRepeat = 100;
     %container.resizeContainer = true;
 
     return %container;

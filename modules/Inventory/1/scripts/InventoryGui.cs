@@ -25,19 +25,18 @@ function InventoryDialog::initialize(%this)
     {
         Name="InventoryStorePane";
         Profile="InventoryDefaultProfile";
-        HorizSizing="relative";
-        VertSizing="relative";
+        HorizSizing="right";
+        VertSizing="bottom";
         Position="0 0";
         Extent="240 768";
         MinExtent="240 320";
         Visible="1";
     };
-    %this.add(%this.storePane);
+    %this.addGuiControl(%this.storePane);
     %this.storePane.add(Inventory.storeContainer);
     Inventory.storeContainer.resizeContainer();
 
     // set up inventory container
-    Inventory.inventoryContainer = createInventoryGridContainer();
     %this.inventoryPane = new GuiControl()
     {
         Name="InventoryInventoryPane";
@@ -49,7 +48,9 @@ function InventoryDialog::initialize(%this)
         MinExtent="240 320";
         Visible="1";
     };
-    %this.add(%this.inventoryPane);
+    %this.addGuiControl(%this.inventoryPane);
+    Inventory.inventoryContainer = createInventoryGridContainer(%this.inventoryPane);
+    Inventory.inventoryContainer.setCellBackground("Inventory:bagGrid");
     %this.inventoryPane.add(Inventory.inventoryContainer);
     Inventory.inventoryContainer.resizeContainer();
 
@@ -85,21 +86,20 @@ function InventoryDialog::createItemButton(%this, %itemImage, %itemName, %itemPr
         HorizSizing="right";
         VertSizing="bottom";
         Position="0 0";
-        Extent="220 60";
-        MinExtent="230 60";
+        Extent="190 60";
+        MinExtent="100 60";
         Visible="1";
     };
     
-    %buttonImage = new GuiSpriteCtrl()
+    %buttonImage = new GuiButtonCtrl()
     {
-        Profile="InventoryDefaultProfile";
+        Profile="InventoryButtonProfile";
         HorizSizing="right";
         VertSizing="bottom";
         Position = "0 0";
-        Extent="220 60";
-        MinExtent="230 60";
+        Extent="190 60";
+        MinExtent="100 60";
         Visible="1";
-        Image = "Sandbox:largeContainer";
     };
     %button.addGuiControl(%buttonImage);
     
