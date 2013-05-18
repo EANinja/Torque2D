@@ -4,6 +4,7 @@ function Inventory::create( %this )
     %this.loadPreferences();
     
     // Load Inventory scripts.
+    exec( "./scripts/assetGen.cs" );
     exec( "./scripts/Inventory.cs" );
     exec( "./scripts/InventoryGui.cs" );
     exec( "./scripts/verticalScrollContainer.cs" );
