@@ -277,19 +277,6 @@ function InventoryGridCtrl::addButton(%this, %guiControl, %object, %handler, %da
         %this.resizeCtrl = false;
         %this.resizeContainer();
     }
-
-    %this.resizeContentPane();
-
-    if (%this.contentPane.Extent.y > %this.scrollCtrl.Extent.y)
-    {
-        %this.upButton.button.setActive(true);
-        %this.downButton.button.setActive(true);
-    }
-    else
-    {
-        %this.upButton.button.setActive(false);
-        %this.downButton.button.setActive(false);
-    }
 }
 
 function InventoryGridCtrl::onAdd(%this)
@@ -382,11 +369,10 @@ function InventoryGridCtrl::resizeContentPane(%this)
     %this.contentPane.rowSize = %this.buttonHeight;
     %this.contentPane.colSize = %this.contentContainer.Extent.x;
 
-    %this.contentPane.refresh();
     %this.paneSize = getWord(%this.contentContainer.Extent, 1);
     %this.itemCount = %this.contentPane.getCount();    
-
-    %this.scrollCtrl.scrollToTop();
+    
+    %this.resizeContainer();
 }
 
 /// <summary>
@@ -429,9 +415,11 @@ function InventoryGridCtrl::setCellBackground(%this, %image)
         {
             %x = (%i * %size.x) + (%i * %this.contentPane.colSpacing);
             %y = (%j * %size.y) + (%j * %this.contentPane.rowSpacing);
-            %sprite = new GuiSpriteCtrl()
+            %name="x"@%i@"y"@%j;
+            %sprite = new GuiSpriteCtrl(%name)
             {
                 Profile="InventoryDefaultProfile";
+                class="inventoryCell";
                 HorizSizing="right";
                 VertSizing="bottom";
                 Extent=%size;
@@ -521,134 +509,6 @@ function InventoryGridCtrl::getCount(%this)
 }
 
 /// <summary>
-/// Sets the distance that the container scrolls per repeat cycle that the scroll button is held down.
-/// The value is a fraction of the button height, so 0.5 is half button height, 2 is twice button height.
-/// The default is 0.3.
-/// </summary>
-/// <param name="multiplier">The fraction of the current button height to scroll.</param>
-function InventoryGridCtrl::setScrollSpeed(%this, %multiplier)
-{
-    %this.scrollSpeed = %multiplier;
-}
-
-/// <summary>
-/// Sets the repeat rate for continuous scrolling in milliseconds.  The default is 100 ms.
-/// </summary>
-/// <param name="rate">Milliseconds between scroll actions.</param>
-function InventoryGridCtrl::setScrollRepeat(%this, %rate)
-{
-    %this.scrollRepeat = %rate;
-}
-
-/// <summary>
-/// Enables or disables onScroll callbacks.
-/// </summary>
-/// <param name="%flag">Set to true to enable onScroll callbacks, false to disable them.</param>
-function InventoryGridCtrl::setScrollCallbacks(%this, %flag)
-{
-    %this.scrollCallbacks = %flag;
-    %this.scrollCtrl.setUseScrollEvents(%flag);
-}
-
-/// <summary>
-/// This is to set the handler for scrollCtrl's onScroll callback.  This is to allow any given instance
-/// of a VerticalcontentContainer to have its own way of handling this callback.
-/// </summary>
-/// <param name="funcName">The method that the onScroll() callback will pass control to.</param>
-function InventoryGridCtrl::setScrollHandler(%this, %funcName)
-{
-    %this.scrollCtrl.scrollHandler = %funcName;
-}
-
-/// <summary>
-/// This function manually sets the item indicator arrow to point to the item at the 
-/// specified index.
-/// </summary>
-/// <param name="index">The index of the item to point to.</param>
-function InventoryGridCtrl::setIndicatorToButton(%this, %index)
-{
-    %this.selectedButton = %this.getButton(%index);
-    %this.updateIndicatorPosition();
-}
-
-/// <summary>
-/// This function handles updating the selected item indicator arrow position when the scroll
-/// control state changes.
-/// </summary>
-/// <param name="childPos">Position information passed from the onScroll() callback.</param>
-/// <param name="childRelPos">Position information passed from the onScroll() callback.</param>
-function InventoryGridCtrl::updateIndicatorPosition(%this, %childPos, %childRelPos)
-{
-    if ( %childPos $= "" )
-        %childPos = %this.scrollCtrl.childPos;
-    if ( %childRelPos $= "" )
-        %childRelPos = %this.scrollCtrl.childRelPos;
-
-    if ( !isObject ( %this.indicatorArrow ) && %this.indicatorImage !$= "" )
-    {
-        %tempAsset = AssetDatabase.acquireAsset(%this.indicatorImage);
-        %this.indicatorArrow = new GuiSpriteCtrl()
-        {
-            canSaveDynamicFields="0";
-            isContainer="0";
-            Profile="GuiTransparentProfile";
-            HorizSizing="left";
-            VertSizing="top";
-            Position="0 0";
-            Extent=%tempAsset.getImageSize();
-            MinExtent="8 2";
-            canSave = "0";
-            Visible="1";
-            hovertime="1000";
-            wrap="0";
-            useSourceRect="0";
-            sourceRect="0 0 0 0";
-            Image=%this.indicatorImage;
-        };
-        AssetDatabase.releaseAsset(%this.indicatorImage);
-        EditorShellGui.add(%this.indicatorArrow);
-    }
-    EditorShellGui.pushToBack(%this.indicatorArrow);
-    %basePos = %this.getParent().Position;
-    %containerPos = %this.Position.x + %basePos.x SPC %this.Position.y + %basePos.y;
-    %contentContainerPos = %containerPos.x + %this.contentContainer.Position.x SPC %containerPos.y + %this.contentContainer.Position.y;
-    %scrollOffset = %this.contentContainer.Extent.x + %contentContainerPos.x + $InventoryGridCtrl::ScrollIndicatorXOffset;
-
-    if ( isObject(%this.selectedButton) )
-        %button = %this.getButton(%this.selectedButton.index);
-    else
-        %button = %this.getButton(0);
-        
-    %buttonOffset = %button.Position.y + (%button.Extent.y / 2) + %childPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
-    %yPos = %contentContainerPos.y + %buttonOffset;
-    if (%yPos < %contentContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset)
-        %yPos = %contentContainerPos.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
-    if (%yPos > (%contentContainerPos.y + %this.scrollCtrl.Extent.y) + $InventoryGridCtrl::ScrollIndicatorYOffset)
-        %yPos = %contentContainerPos.y + %this.scrollCtrl.Extent.y + $InventoryGridCtrl::ScrollIndicatorYOffset;
-    %this.indicatorArrow.setPosition(%scrollOffset, %yPos);
-}
-
-/// <summary>
-/// This is the container's scroll control onScroll callback function.  If onScroll events are enabled 
-/// with setScrollCallbacks, this callback will handle all changes to %this.scrollCtrl scroll position.
-/// </summary>
-/// <param name="childStart">The position of the scroll control's 'contained' control before scrolling.</param>
-/// <param name="childRelStart">The relative position of the scroll control's 'contained' control before scrolling.</param>
-/// <param name="childPos">The position of the scroll control's 'contained' control after scrolling.</param>
-/// <param name="childRelPos">The relative position of the scroll control's 'contained' control after scrolling.</param>
-function IGCScrollCtrl::onScroll(%this, %childStart, %childRelStart, %childPos, %childRelPos)
-{
-    %this.childPos = %childPos;
-    %this.childRelPos = %childRelPos;
-    // take care of updating the selection indicator if we have one.
-    if (%this.container.indicatorImage !$= "")
-        %this.container.updateIndicatorPosition(%childPos, %childRelPos);
-
-    if ( %this.scrollHandler !$= "" )
-        eval(%this.scrollHandler@"(\""@%childStart@"\",\""@%childRelStart@"\",\""@%childPos@"\",\""@%childRelPos@"\");");
-}
-
-/// <summary>
 /// This handles button clicks for contained buttons.  It checks to ensure that 
 /// the object has the assigned method, then calls that method with the assigned
 /// data.
@@ -687,7 +547,50 @@ function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseC
     %halfParentHeight = %this.sprite.Extent.y / 2;
     %position.x -= %halfParentWidth;
     %position.y -= %halfParentHeight;
+
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
+    
+    %oldObj = %this.parentCell.getObject(0);
+    %this.parentCell.remove(%oldObj);
+}
+
+function inventoryCell::onControlDropped(%this, %control, %position)
+{
+    echo(" @@@ dropped in inventory at " @ %this.getName());
+    //%pos = (%this.Position.x + (%this.Extent.x / 2)) SPC (%this.Position.y + (%this.Extent.y / 2));
+    %posx = (%this.Extent.x - %control.Extent.x) / 2;
+    %posy = (%this.Extent.y - %control.Extent.y) / 2;
+
+	%clickEvent = new GuiMouseEventCtrl()
+	{
+	    class="IGCDynamicButton";
+		canSaveDynamicFields="0";
+		isContainer="0";
+		Profile="GuiTransparentProfile";
+        HorizSizing="left";
+        VertSizing="top";
+		Position="0 0";
+		Extent=%extent;
+		MinExtent="8 2";
+		canSave="1";
+		Visible="1";
+		hovertime="1000";
+        toolTipProfile=%toolTipProfile;
+        toolTip=%guiControl.toolTip;
+		groupNum="-1";
+	};
+
+    %sprite = new GuiSpriteCtrl()
+    {
+        Extent = %control.Extent;
+        Image = %control.Image;
+    };
+    %clickEvent.addGuiControl(%sprite);
+    %sprite.Position = %posx SPC %posy;
+    %this.addGuiControl(%clickEvent);
+    %clickEvent.sprite = %sprite;
+    %clickEvent.parentCell = %this;
+    echo(" @@@ Control.Extent: " @ %sprite.Extent @ " : Position: " @ %sprite.Position);
 }
 
 /// <summary>
