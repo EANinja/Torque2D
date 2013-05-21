@@ -409,6 +409,9 @@ function InventoryGridCtrl::setCellBackground(%this, %image)
     %this.contentPane.setPosition(%position.x, %position.y);
     %this.contentPane.Extent = %panelWidth SPC %panelHeight;
     %this.contentPane.colCount = %colCount;
+    %this.contentPane.rowCount = %rowCount;
+    %this.colCount = %colCount;
+    %this.rowCount = %rowCount;
     for ( %i = 0; %i < %colCount; %i++)
     {
         for ( %j = 0; %j < %rowCount; %j++)
@@ -549,7 +552,8 @@ function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseC
     %position.y -= %halfParentHeight;
 
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
-    
+
+    //%count = %this.parentCell.getCount();
     %oldObj = %this.parentCell.getObject(0);
     %this.parentCell.remove(%oldObj);
 }
@@ -557,6 +561,47 @@ function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseC
 function inventoryCell::onControlDropped(%this, %control, %position)
 {
     echo(" @@@ dropped in inventory at " @ %this.getName());
+    %objCount = %this.getCount();
+    if (%objCount > 0)
+    {
+        // find a nearby empty cell and drop there instead.
+        %location = %this.getName();
+        %position = strreplace(%location, "y", " ");
+        %position = strreplace(%position, "x", "");
+        %x = getWord(%position, 0);
+        %y = getWord(%position, 1);
+        if (Inventory.inventoryContainer.fillFromTopLeft)
+        {
+            for (%i = 0; %i < Inventory.inventoryContainer.rowCount; %i++)
+            {
+                for (%j = 0; %j < Inventory.inventoryContainer.colCount; %j++)
+                {
+                    %cell = "x" @ %j @ "y" @ %i;
+                    if (!%cell.getCount())
+                    {
+                        %cell.onControlDropped(%control, %position);
+                        return;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (%i = %y; %i < Inventory.inventoryContainer.rowCount; %i++)
+            {
+                for (%j = %x; %j < Inventory.inventoryContainer.colCount; %j++)
+                {
+                    %cell = "x" @ %j @ "y" @ %i;
+                    if (!%cell.getCount())
+                    {
+                        %cell.onControlDropped(%control, %position);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     //%pos = (%this.Position.x + (%this.Extent.x / 2)) SPC (%this.Position.y + (%this.Extent.y / 2));
     %posx = (%this.Extent.x - %control.Extent.x) / 2;
     %posy = (%this.Extent.y - %control.Extent.y) / 2;
@@ -579,7 +624,7 @@ function inventoryCell::onControlDropped(%this, %control, %position)
         toolTip=%guiControl.toolTip;
 		groupNum="-1";
 	};
-
+    %clickEvent.parentCell = %this;
     %sprite = new GuiSpriteCtrl()
     {
         Extent = %control.Extent;

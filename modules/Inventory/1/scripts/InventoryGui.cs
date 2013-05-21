@@ -108,6 +108,7 @@ function InventoryDialog::initialize(%this)
     };
     %this.addGuiControl(%this.inventoryPane);
     Inventory.inventoryContainer = createInventoryGridContainer(%this.inventoryPane);
+    Inventory.inventoryContainer.fillFromTopLeft = true;
     %this.inventoryPane.add(Inventory.inventoryContainer);
     Inventory.inventoryContainer.resizeContainer();
     Inventory.inventoryContainer.setCellBackground("Inventory:bagGrid");
