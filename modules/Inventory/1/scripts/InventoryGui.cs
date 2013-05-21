@@ -1,3 +1,19 @@
+/// <summary>
+/// Catch all in case there's something that catches drag and drops beneath us.
+/// </summary>
+/// <param name="this">The Inventory Gui</param>
+/// <param name="control"> The control that was dropped.</param>
+/// <param name="position"> The position the control was dropped at.</param>
+function InventoryDialog::onControlDropped( %this, %control, %position )
+{
+    // check contained controls.  If any of them handle dropped controls then
+    // let them do it.
+    if ( ABStoryboardWindow.pointInControl( %position.x, %position.y ) )
+        ABStoryboardWindow.onControlDropped( %control, %position );
+    if ( %control.spriteClass $= "ABStoryboardPreviewSprite" )
+        AnimationBuilder.removeFrame( %control.frameNumber );
+}
+
 function InventoryDialog::onDialogPush(%this)
 {
 }
@@ -19,6 +35,17 @@ function InventoryDialog::onSleep(%this)
 
 function InventoryDialog::initialize(%this)
 {
+    // set up store inventory
+    %newInv = new ScriptObject()
+    {
+        class="InventoryObject";
+    };
+    Inventory.storeInventory = %newInv;
+    Inventory.storeInventory.addInventoryItem("ToyAssets:Planetoid Rocks 10 5");
+    Inventory.storeInventory.addInventoryItem("ToyAssets:TD_Bones_01Sprite Sticks 8 5");
+    Inventory.storeInventory.addInventoryItem("ToyAssets:brick_01 Food 25 10");
+    Inventory.storeInventory.addInventoryItem("ToyAssets:TD_Crystal_blueSprite Water 5 -1");
+    Inventory.storeInventory.addInventoryItem("ToyAssets:TD_Crystal_redSprite Knife 50 5");
     // set up store container
     Inventory.storeContainer = createVerticalScrollContainer();
     %this.storePane = new GuiControl()
@@ -36,6 +63,12 @@ function InventoryDialog::initialize(%this)
     %this.storePane.add(Inventory.storeContainer);
     Inventory.storeContainer.resizeContainer();
 
+    // set up container inventory
+    %newInv = new ScriptObject()
+    {
+        class="InventoryObject";
+    };
+    Inventory.containerInventory = %newInv;
     // set up inventory container
     %this.inventoryPane = new GuiControl()
     {
@@ -50,9 +83,9 @@ function InventoryDialog::initialize(%this)
     };
     %this.addGuiControl(%this.inventoryPane);
     Inventory.inventoryContainer = createInventoryGridContainer(%this.inventoryPane);
-    Inventory.inventoryContainer.setCellBackground("Inventory:bagGrid");
     %this.inventoryPane.add(Inventory.inventoryContainer);
     Inventory.inventoryContainer.resizeContainer();
+    Inventory.inventoryContainer.setCellBackground("Inventory:bagGrid");
 
     %this.initialized = true;
 }
@@ -68,11 +101,14 @@ function InventoryDialog::sellItem(%this, %item)
 function InventoryDialog::populateStorePane(%this)
 {
     Inventory.storeContainer.clear();
-    for (%i = 0; %i < 5; %i++)
+    %contents = Inventory.storeInventory.getContents();
+    %itemCount = getRecordCount(%contents);
+    for (%i = 0; %i < %itemCount; %i++)
     {
-        %image = getWord($Inventory::StoreContents[%i], 0);
-        %name = getWord($Inventory::StoreContents[%i], 1);
-        %price = getWord($Inventory::StoreContents[%i], 2);
+        %itemRecord = getRecord(%contents, %i);
+        %image = getWord(%itemRecord, 0);
+        %name = getWord(%itemRecord, 1);
+        %price = getWord(%itemRecord, 2);
         Inventory.storeContainer.addButton(%this.createItemButton(%image, %name, %price), "", "", "");
     }
     Inventory.storeContainer.resizeContainer();

@@ -377,13 +377,13 @@ function InventoryGridCtrl::resizeContentPane(%this)
     %spacing = %this.contentPane.rowSpacing;
     %height = (%count * %this.buttonHeight) + (%count * %spacing);
 
-    %position = %this.contentPane.Position;
-    %this.contentPane.resize(0, 0, %this.scrollCtrl.Extent.x, %height);
+    %position = %this.contentContainer.Position;
+    %this.contentPane.resize(0, 0, %this.contentContainer.Extent.x, %height);
     %this.contentPane.rowSize = %this.buttonHeight;
-    %this.contentPane.colSize = %this.scrollCtrl.Extent.x;
+    %this.contentPane.colSize = %this.contentContainer.Extent.x;
 
     %this.contentPane.refresh();
-    %this.paneSize = getWord(%this.scrollCtrl.Extent, 1);
+    %this.paneSize = getWord(%this.contentContainer.Extent, 1);
     %this.itemCount = %this.contentPane.getCount();    
 
     %this.scrollCtrl.scrollToTop();
@@ -421,11 +421,14 @@ function InventoryGridCtrl::setCellBackground(%this, %image)
     %position.x += 18;
     %position.y += 18;
     %this.contentPane.setPosition(%position.x, %position.y);
+    %this.contentPane.Extent = %panelWidth SPC %panelHeight;
     %this.contentPane.colCount = %colCount;
     for ( %i = 0; %i < %colCount; %i++)
     {
         for ( %j = 0; %j < %rowCount; %j++)
         {
+            %x = (%i * %size.x) + (%i * %this.contentPane.colSpacing);
+            %y = (%j * %size.y) + (%j * %this.contentPane.rowSpacing);
             %sprite = new GuiSpriteCtrl()
             {
                 Profile="InventoryDefaultProfile";
@@ -433,13 +436,14 @@ function InventoryGridCtrl::setCellBackground(%this, %image)
                 VertSizing="bottom";
                 Extent=%size;
                 MinExtent=%size;
+                Position=%x SPC %y;
                 Visible="1";
                 Image = %image;
             };
             %this.contentPane.add(%sprite);
         }
     }
-    %this.resizeContainer();
+    //%this.resizeContainer();
 }
 
 /// <summary>
@@ -708,7 +712,7 @@ function createInventoryGridContainer(%requestor, %profile, %page)
     %container.addGuiControl(%pageContainer);
     %container.contentContainer = %pageContainer;
 
-    %contentPane = new GuiDynamicCtrlArrayControl()
+    %contentPane = new GuiControl()
     {
         class="IGCContent";
         canSaveDynamicFields="0";
@@ -722,11 +726,11 @@ function createInventoryGridContainer(%requestor, %profile, %page)
         canSave="1";
         Visible="1";
         hovertime="1000";
-        colCount="1";
-        colSize="1024";
-        rowSize="106";
-        rowSpacing="0";
-        colSpacing="0";
+            colCount="1";
+            colSize="1024";
+            rowSize="106";
+            rowSpacing="0";
+            colSpacing="0";
     };
     %container.addGuiControl(%contentPane);
     %container.contentPane = %contentPane;
