@@ -396,7 +396,11 @@ function VerticalScrollCtrl::addButton(%this, %guiControl, %object, %handler, %d
                 %k++;
             }
             else
+            {
+                if ( %type $= "GuiSpriteCtrl" )
+                    %clickEvent.sprite = %temp;
                 %button.addGuiControl(%temp);
+            }
 	    }
 	    %itemCount=%guiControl.getCount();
 	}
@@ -776,6 +780,31 @@ function VsDynamicButton::onMouseUp(%this)
         if (%object.isMethod(%this.handler))
             %object.call(%this.handler, %this.data);
     }
+}
+
+function VsDynamicButton::onMouseDown(%this, %id, %mousePoint)
+{
+    echo(" @@@ VsDynamicButton::onMouseDown(" @ %this @ ", " @ %id @ ", " @ %mousePoint @ ")");
+    %position = %mousePoint;
+    %halfParentWidth = %this.sprite.Extent.x / 2;
+    %halfParentHeight = %this.sprite.Extent.y / 2;
+    %position.x -= %halfParentWidth;
+    %position.y -= %halfParentHeight;
+    Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
+}
+
+function VsDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseClickCount)
+{
+    echo(" @@@ VsDynamicButton::onMouseDragged(" @ %this @ ", " @ %modifier @ ", " @ %mousePoint @ ", " @ %mouseClickCount @ ")");
+    //if (!%this.getParent().isActive())
+        //return;
+
+    %position = %mousePoint;
+    %halfParentWidth = %this.sprite.Extent.x / 2;
+    %halfParentHeight = %this.sprite.Extent.y / 2;
+    %position.x -= %halfParentWidth;
+    %position.y -= %halfParentHeight;
+    Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
 }
 
 /// <summary>

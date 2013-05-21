@@ -665,6 +665,31 @@ function IGCDynamicButton::onMouseUp(%this)
         %object.call(%this.handler, %this.data);
 }
 
+function IGCDynamicButton::onMouseDown(%this, %id, %mousePoint)
+{
+    echo(" @@@ IGCDynamicButton::onMouseDown(" @ %this @ ", " @ %id @ ", " @ %mousePoint @ ")");
+    %position = %mousePoint;
+    %halfParentWidth = %this.sprite.Extent.x / 2;
+    %halfParentHeight = %this.sprite.Extent.y / 2;
+    %position.x -= %halfParentWidth;
+    %position.y -= %halfParentHeight;
+    Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
+}
+
+function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseClickCount)
+{
+    echo(" @@@ IGCDynamicButton::onMouseDragged(" @ %this @ ", " @ %modifier @ ", " @ %mousePoint @ ", " @ %mouseClickCount @ ")");
+    //if (!%this.getParent().isActive())
+        //return;
+
+    %position = %mousePoint;
+    %halfParentWidth = %this.sprite.Extent.x / 2;
+    %halfParentHeight = %this.sprite.Extent.y / 2;
+    %position.x -= %halfParentWidth;
+    %position.y -= %halfParentHeight;
+    Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
+}
+
 /// <summary>
 /// This "factory" function creates a vertical scroll container and returns a 
 /// reference to it.  Use the returned reference to work with the container.

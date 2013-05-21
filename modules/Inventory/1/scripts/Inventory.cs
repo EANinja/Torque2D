@@ -107,8 +107,29 @@ function InventoryObject::addInventoryItem(%this, %itemData)
     %this.contents[%index] = %itemData;
 }
 
-$Inventory::StoreContents[0] = "ToyAssets:Planetoid Rocks 10 5";
-$Inventory::StoreContents[1] = "ToyAssets:TD_Bones_01Sprite Sticks 8 5";
-$Inventory::StoreContents[2] = "ToyAssets:brick_01 Food 25 10";
-$Inventory::StoreContents[3] = "ToyAssets:TD_Crystal_blueSprite Water 5 -1";
-$Inventory::StoreContents[4] = "ToyAssets:TD_Crystal_redSprite Knife 50 5";
+/// <summary>
+/// Handles inventory button clicks.
+/// This can be used to route clicks for individual inventory instances.
+/// </summary>
+/// <param name="data">The data attached to the clicked object.</param>
+function InventoryObject::invButtonClick(%this, %data)
+{
+    // The first element of the data collection I pass is the ID of the 
+    // inventory object that the data belongs to.  This is not the same as the
+    // container gui - it refers to the script object where the data originates.
+    echo(%data);
+}
+
+function InventoryObject::onMouseDragged(%this, %modifier, %mousePoint, %mouseClickCount)
+{
+    echo(" @@@ InventoryObject::onMouseDragged(" @ %this @ ", " @ %modifier @ ", " @ %mousePoint @ ", " @ %mouseClickCount @ ")");
+    if (!%this.getParent().isActive())
+        return;
+
+    %position = %mousePoint;
+    %halfParentWidth = %this.sprite.Extent.x / 2;
+    %halfParentHeight = %this.sprite.Extent.y / 2;
+    %position.x -= %halfParentWidth;
+    %position.y -= %halfParentHeight;
+    Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
+}

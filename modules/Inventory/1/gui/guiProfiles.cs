@@ -446,3 +446,8 @@ if (!isObject(InventorySunkenContainerProfile)) new GuiControlProfile (Inventory
     bitmap = "^Inventory/gui/images/sunkenContainer";
     borderColor = "40 40 40 10";
 };
+
+
+if (!isObject(GuiDragAndDropProfile)) new GuiControlProfile (GuiDragAndDropProfile : GuiDefaultProfile)
+{
+};
