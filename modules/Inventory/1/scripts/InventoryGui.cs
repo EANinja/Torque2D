@@ -259,6 +259,8 @@ function storeContainerClass::onControlDropped(%this, %control, %position)
     echo(" @@@ dropped in store");
     %container = InventoryDialog.storePane;
     %dropPosition = Vector2Sub(%position, %container.getGlobalPosition());
+    // code to sell item to store.  Add to store inventory, remove from 
+    // player inventory, credit player with money.
 }
 
 function inventoryContainerClass::onControlDropped(%this, %control, %position)
@@ -266,4 +268,7 @@ function inventoryContainerClass::onControlDropped(%this, %control, %position)
     echo(" @@@ dropped in inventory");
     %container = InventoryDialog.inventoryPane;
     %dropPosition = Vector2Sub(%position, %container.getGlobalPosition());
+    // code to buy item from store.  Check for sufficient player funds, if so 
+    // debit funds, remove item from store inventory and add it to player
+    // inventory.
 }
