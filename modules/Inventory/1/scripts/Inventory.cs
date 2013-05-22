@@ -133,3 +133,8 @@ function InventoryObject::onMouseDragged(%this, %modifier, %mousePoint, %mouseCl
     %position.y -= %halfParentHeight;
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
 }
+
+function GuiSpriteCtrl::onDelete(%this)
+{
+    echo(" @@@ " @ %this @ ":" @ %this.getClassName() @ " deleted");
+}

@@ -9,9 +9,13 @@ function Inventory::create( %this )
     exec( "./scripts/InventoryGui.cs" );
     exec( "./scripts/verticalScrollContainer.cs" );
     exec( "./scripts/inventoryGridContainer.cs" );
+    exec( "./scripts/inventoryEventManager.cs" );
         
     // Load GUI profiles.
     exec("./gui/guiProfiles.cs");
+
+    // initialize event manager
+    initializeInventoryEventManager();
 
     // Load and configure the inventory dialog.
     Inventory.add( TamlRead("./gui/Inventory.gui.taml") );
@@ -22,6 +26,7 @@ function Inventory::create( %this )
 
 function Inventory::destroy( %this )
 {
+    destroyInventoryEventManager();
     echo ( " @@@ Inventory::destroy()");
     %this.savePreferences();
 }

@@ -556,6 +556,7 @@ function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseC
     //%count = %this.parentCell.getCount();
     %oldObj = %this.parentCell.getObject(0);
     %this.parentCell.remove(%oldObj);
+    InventoryEventManager.postEvent("_ItemDeleteRequest", %oldObj);
 }
 
 function inventoryCell::onControlDropped(%this, %control, %position)
@@ -564,6 +565,12 @@ function inventoryCell::onControlDropped(%this, %control, %position)
     %objCount = %this.getCount();
     if (%objCount > 0)
     {
+        if (%control.parentCell !$= "")
+        {
+            echo(" @@@ Control:parentCell: " @ %control.parentCell);
+            %control.parentCell.onControlDropped(%control, %position);
+            return;
+        }
         // find a nearby empty cell and drop there instead.
         %location = %this.getName();
         %position = strreplace(%location, "y", " ");
@@ -602,7 +609,7 @@ function inventoryCell::onControlDropped(%this, %control, %position)
         }
     }
 
-    //%pos = (%this.Position.x + (%this.Extent.x / 2)) SPC (%this.Position.y + (%this.Extent.y / 2));
+    
     %posx = (%this.Extent.x - %control.Extent.x) / 2;
     %posy = (%this.Extent.y - %control.Extent.y) / 2;
 
@@ -635,7 +642,8 @@ function inventoryCell::onControlDropped(%this, %control, %position)
     %this.addGuiControl(%clickEvent);
     %clickEvent.sprite = %sprite;
     %clickEvent.parentCell = %this;
-    echo(" @@@ Control.Extent: " @ %sprite.Extent @ " : Position: " @ %sprite.Position);
+    %sprite.parentCell = %this;
+    echo(" @@@ Control: " @ %control @ " : class: " @ %control.getClassName());
 }
 
 /// <summary>

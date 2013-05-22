@@ -29,6 +29,15 @@ function InventoryDialog::onControlDropped( %this, %control, %position )
     if ( %this.inventoryPane.pointInControl( %position.x, %position.y ) )
         %this.inventoryPane.onControlDropped( %control, %position );
 }
+function InventoryDialog::deleteObject(%this, %obj)
+{
+    %childCount = %obj.getCount();
+    for(%i = 0; %i < %childCount; %i++)
+    {
+        %obj.getObject(%i).delete();
+    }
+    %obj.delete();
+}
 
 function InventoryDialog::onDialogPush(%this)
 {
