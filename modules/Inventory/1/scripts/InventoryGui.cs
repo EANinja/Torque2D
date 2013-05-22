@@ -144,7 +144,7 @@ function InventoryDialog::populateStorePane(%this)
         %image = getWord(%itemRecord, 0);
         %name = getWord(%itemRecord, 1);
         %price = getWord(%itemRecord, 2);
-        Inventory.storeContainer.addButton(%this.createItemButton(%image, %name, %price), Inventory.storeInventory, "invButtonClick", Inventory.storeInventory.getID() SPC %itemRecord);
+        Inventory.storeContainer.addButton(%this.createItemButton(%image, %name, %price), Inventory.storeInventory, "invButtonClick", %itemRecord);
     }
     Inventory.storeContainer.resizeContainer();
 }
@@ -237,10 +237,6 @@ function storeContainerClass::onControlDropped(%this, %control, %position)
     echo(" @@@ dropped in store");
     %container = InventoryDialog.storePane;
     %dropPosition = Vector2Sub(%position, %container.getGlobalPosition());
-    %worldX = getWord(%dropPosition, 0);
-    %sizeX = 64 + 6;
-
-    %index = mFloor((%worldX / %sizeX) + 0.5);
 }
 
 function inventoryContainerClass::onControlDropped(%this, %control, %position)
@@ -248,8 +244,4 @@ function inventoryContainerClass::onControlDropped(%this, %control, %position)
     echo(" @@@ dropped in inventory");
     %container = InventoryDialog.inventoryPane;
     %dropPosition = Vector2Sub(%position, %container.getGlobalPosition());
-    %worldX = getWord(%dropPosition, 0);
-    %sizeX = 64 + 6;
-
-    %index = mFloor((%worldX / %sizeX) + 0.5);
 }

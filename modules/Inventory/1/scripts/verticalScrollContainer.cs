@@ -790,6 +790,7 @@ function VsDynamicButton::onMouseDown(%this, %id, %mousePoint)
     %halfParentHeight = %this.sprite.Extent.y / 2;
     %position.x -= %halfParentWidth;
     %position.y -= %halfParentHeight;
+    %this.sprite.data = %this.data;
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
 }
 

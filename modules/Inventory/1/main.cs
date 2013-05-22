@@ -69,6 +69,8 @@ function Inventory::createDraggingControl(%this, %sprite, %spritePosition, %mous
         scene = %this.draggingScene;
         Extent = %size;
         Image = %sprite.Image;
+        data = %sprite.data;
+        parentCell = %sprite.parentCell;
     };
     //%spritePane.Frame = %sprite.Frame;
     %spritePane.frameNumber = %sprite.frameNumber;

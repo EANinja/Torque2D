@@ -71,7 +71,7 @@ function InventoryObject::addItem(%this, %item, %count)
 /// <summary>
 /// Finds an item in the inventory.
 /// </summary>
-/// <param name="item">The item to find.</param>
+/// <param name="item">The item to find.  This uses the "game item ID" to search.</param>
 /// <return>Returns the slot if found, or -1 if not.
 function InventoryObject::findItem(%this, %item)
 {
@@ -80,7 +80,7 @@ function InventoryObject::findItem(%this, %item)
     %invSlot = %this.contents[%index++];
     while(%invSlot !$= "")
     {
-        %current = getWord(%invSlot, 1);
+        %current = getWord(%invSlot, 4);
         if ( %current %= %item )
         {
             %found = true;
@@ -132,9 +132,4 @@ function InventoryObject::onMouseDragged(%this, %modifier, %mousePoint, %mouseCl
     %position.x -= %halfParentWidth;
     %position.y -= %halfParentHeight;
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
-}
-
-function GuiSpriteCtrl::onDelete(%this)
-{
-    echo(" @@@ " @ %this @ ":" @ %this.getClassName() @ " deleted");
 }

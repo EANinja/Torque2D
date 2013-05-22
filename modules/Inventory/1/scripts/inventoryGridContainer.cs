@@ -565,7 +565,7 @@ function inventoryCell::onControlDropped(%this, %control, %position)
     %objCount = %this.getCount();
     if (%objCount > 0)
     {
-        if (%control.parentCell !$= "")
+        if (%control.parentCell !$= "" && %control.parentCell !$= %this.getName())
         {
             echo(" @@@ Control:parentCell: " @ %control.parentCell);
             %control.parentCell.onControlDropped(%control, %position);
@@ -636,14 +636,15 @@ function inventoryCell::onControlDropped(%this, %control, %position)
     {
         Extent = %control.Extent;
         Image = %control.Image;
+        data = %control.data;
     };
     %clickEvent.addGuiControl(%sprite);
     %sprite.Position = %posx SPC %posy;
     %this.addGuiControl(%clickEvent);
     %clickEvent.sprite = %sprite;
-    %clickEvent.parentCell = %this;
-    %sprite.parentCell = %this;
-    echo(" @@@ Control: " @ %control @ " : class: " @ %control.getClassName());
+    %clickEvent.parentCell = %this.getName();
+    %sprite.parentCell = %this.getName();
+    echo(" @@@ Control: " @ %control @ " : class: " @ %control.getClassName() @ " : data: " @ %control.data);
 }
 
 /// <summary>
