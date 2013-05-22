@@ -636,7 +636,7 @@ function inventoryCell::onControlDropped(%this, %control, %position)
 	    class="IGCDynamicButton";
 		canSaveDynamicFields="0";
 		isContainer="0";
-		Profile="GuiTransparentProfile";
+		Profile = "InventoryTransparentProfile";
         HorizSizing="left";
         VertSizing="top";
 		Position="0 0";
@@ -652,6 +652,7 @@ function inventoryCell::onControlDropped(%this, %control, %position)
     %clickEvent.parentCell = %this;
     %sprite = new GuiSpriteCtrl()
     {
+        Profile = "InventoryDefaultProfile";
         Extent = %control.Extent;
         Image = %control.Image;
         data = %control.data;

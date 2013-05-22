@@ -88,8 +88,8 @@ function Inventory::createDraggingControl(%this, %sprite, %spritePosition, %mous
     // And the sprite to display.
     %spritePane = new GuiSpriteCtrl()
     {
-        scene = %this.draggingScene;
         Extent = %size;
+        Profile = "InventoryDefaultProfile";
         Image = %sprite.Image;
         data = %sprite.data;
         parentCell = %sprite.parentCell;

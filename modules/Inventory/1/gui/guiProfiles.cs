@@ -448,6 +448,22 @@ if (!isObject(InventorySunkenContainerProfile)) new GuiControlProfile (Inventory
 };
 
 
-if (!isObject(GuiDragAndDropProfile)) new GuiControlProfile (GuiDragAndDropProfile : GuiDefaultProfile)
+if (!isObject(GuiDragAndDropProfile)) new GuiControlProfile (GuiDragAndDropProfile : InventoryDefaultProfile)
 {
+};
+
+if(!isObject(InventoryScrollProfile)) new GuiControlProfile (InventoryScrollProfile)
+{
+    opaque = true;
+    fillColor = "255 255 255";
+    border = 1;
+    borderThickness = 2;
+    bitmap = "^Sandbox/gui/images/scrollBar.png";
+    hasBitmapArray = true;
+};
+
+if (!isObject(InventoryTransparentScrollProfile)) new GuiControlProfile (InventoryTransparentScrollProfile : InventoryScrollProfile)
+{
+    opaque = false;
+    border = false;
 };

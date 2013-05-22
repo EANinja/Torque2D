@@ -950,7 +950,7 @@ function createVerticalScrollContainer(%profile)
 		class="VsScrollCtrl";
 		canSaveDynamicFields="0";
 		isContainer="1";
-		Profile="GuiTransparentScrollProfile";
+		Profile="InventoryTransparentScrollProfile";
 		HorizSizing="left";
 		VertSizing="top";
 		Position="0 53";
