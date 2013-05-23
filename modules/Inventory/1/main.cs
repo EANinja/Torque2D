@@ -75,7 +75,7 @@ function Inventory::savePreferences( %this )
 
 function Inventory::createDraggingControl(%this, %sprite, %spritePosition, %mousePosition, %size)
 {
-    echo(" @@@ Inventory::createDraggingControl(" @ %this @ ", " @ %sprite @ ", " @ %spritePosition @ ", " @ %mousePosition @ ", " @ %size @ ")");
+    InventoryDialog.noCashCtrl.text = "";
     // Create the drag and drop control.
     %dragControl = new GuiDragAndDropControl()
     {

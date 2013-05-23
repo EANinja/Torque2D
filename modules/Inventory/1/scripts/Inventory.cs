@@ -20,6 +20,8 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
+$PlayerMoney = $pref::Inventory::default::playerMoney;
+
 function ToggleInventory( %make )
 {
     // Finish if being released.
@@ -74,8 +76,10 @@ function InventoryObject::getContents(%this)
 /// <param name="count">How many to remove.</param>
 function InventoryObject::removeItem(%this, %item, %count)
 {
+    // this is here to support stackable items, ignore for now
     if ( %count $= "" )
         %count = 1;
+    
 }
 
 /// <summary>
@@ -85,9 +89,19 @@ function InventoryObject::removeItem(%this, %item, %count)
 /// <param name="count">How many to add.  Set to -1 to make this item unlimited</param>
 function InventoryObject::addItem(%this, %item, %count)
 {
+    // this is here to support stackable items, ignore for now
     if ( %count $= "" )
         %count = 1;
-    // Do we have this item?
+    // Do we have this item?  This is where we have to handle stackable vs.
+    // non-stackable items.
+    %index = 0;
+    %invSlot = %this.contents[%index];
+    while(%invSlot !$= "")
+    {
+        %index++;
+        %invSlot = %this.contents[%index];
+    }
+    %this.contents[%index] = %item;
 }
 
 /// <summary>
@@ -99,7 +113,7 @@ function InventoryObject::findItem(%this, %item)
 {
     %index = 0;
     %found = false;
-    %invSlot = %this.contents[%index++];
+    %invSlot = %this.contents[%index];
     while(%invSlot !$= "")
     {
         %current = getWord(%invSlot, 4);
@@ -108,11 +122,10 @@ function InventoryObject::findItem(%this, %item)
             %found = true;
             break;
         }
-        %invSlot = %this.contents[%index++];
+        %index++;
+        %invSlot = %this.contents[%index];
     }
-    if (%found)
-        %index -= 1;
-    else
+    if (!%found)
         %index = -1;
     return %index;
 }
@@ -144,7 +157,6 @@ function InventoryObject::invButtonClick(%this, %data)
 
 function InventoryObject::onMouseDragged(%this, %modifier, %mousePoint, %mouseClickCount)
 {
-    echo(" @@@ InventoryObject::onMouseDragged(" @ %this @ ", " @ %modifier @ ", " @ %mousePoint @ ", " @ %mouseClickCount @ ")");
     if (!%this.getParent().isActive())
         return;
 
@@ -154,4 +166,36 @@ function InventoryObject::onMouseDragged(%this, %modifier, %mousePoint, %mouseCl
     %position.x -= %halfParentWidth;
     %position.y -= %halfParentHeight;
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
+}
+
+/// <return>True if purchase was successful</return>
+function InventoryObject::buyItem(%this, %itemData)
+{
+    // for my basic store item I'm using a format as follows:
+    // asset label cost stock objectTag
+    // asset: the asset of the image to display
+    // label: the name of the object to display
+    // cost: the item cost
+    // stock: the number of the item available in the store, -1 is infinite
+    // objectTag: a tag that can be used to link our store object with a game object.
+    %price = getWord(%itemData, 2);
+    if ($PlayerMoney < %price)
+    {
+        // make a pop-up and tell the loser to get more money!
+        // in the mean time, just echo and return
+        InventoryDialog.noCashCtrl.text = "Not enough money to buy " @ getWord(%itemData, 1);
+        return false;
+    }
+    $PlayerMoney -= %price;
+    InventoryDialog.currentCashCtrl.text = $PlayerMoney;
+    return true;
+}
+
+function InventoryObject::sellItem(%this, %itemData)
+{
+    %price = getWord(%itemData, 2);
+    $PlayerMoney += %price;
+    %this.removeItem(%itemData);
+    InventoryDialog.noCashCtrl.text = "";
+    InventoryDialog.currentCashCtrl.text = $PlayerMoney;
 }

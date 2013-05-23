@@ -559,7 +559,6 @@ function IGCDynamicButton::onMouseDown(%this, %id, %mousePoint)
 
 function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseClickCount)
 {
-    echo(" @@@ IGCDynamicButton::onMouseDragged(" @ %this @ ", " @ %modifier @ ", " @ %mousePoint @ ", " @ %mouseClickCount @ ")");
     //if (!%this.getParent().isActive())
         //return;
 
@@ -568,6 +567,8 @@ function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseC
     %halfParentHeight = %this.sprite.Extent.y / 2;
     %position.x -= %halfParentWidth;
     %position.y -= %halfParentHeight;
+    %containerID = Inventory.inventoryContainer.getID();
+    %this.sprite.data = setWord(%this.sprite.data, 5, %containerID);
 
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
 
@@ -579,13 +580,28 @@ function IGCDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseC
 
 function inventoryCell::onControlDropped(%this, %control, %position)
 {
-    echo(" @@@ dropped in inventory at " @ %this.getName());
+    %containerID = Inventory.inventoryContainer.getID();
+    %source = getWord(%control.data, 5);
+    if (%source !$= %containerID)
+    {
+        %success = Inventory.containerInventory.buyItem(%control.data);
+        if (%success)
+        {
+            %control.data = setWord(%control.data, 5, %containerID);
+            Inventory.containerInventory.addItem(%control.data);
+        }
+        else
+        {
+            InventoryEventManager.postEvent("_ItemDeleteRequest", %control);
+            return;
+        }
+    }
+    // support for stackable items will require some additional work here.
     %objCount = %this.getCount();
     if (%objCount > 0)
     {
         if (%control.parentCell !$= "" && %control.parentCell !$= %this.getName())
         {
-            echo(" @@@ Control:parentCell: " @ %control.parentCell);
             %control.parentCell.onControlDropped(%control, %position);
             return;
         }
@@ -663,7 +679,6 @@ function inventoryCell::onControlDropped(%this, %control, %position)
     %clickEvent.sprite = %sprite;
     %clickEvent.parentCell = %this.getName();
     %sprite.parentCell = %this.getName();
-    echo(" @@@ Control: " @ %control @ " : class: " @ %control.getClassName() @ " : data: " @ %control.data);
 }
 
 /// <summary>

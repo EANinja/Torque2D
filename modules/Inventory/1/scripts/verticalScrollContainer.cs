@@ -784,7 +784,6 @@ function VsDynamicButton::onMouseUp(%this)
 
 function VsDynamicButton::onMouseDown(%this, %id, %mousePoint)
 {
-    echo(" @@@ VsDynamicButton::onMouseDown(" @ %this @ ", " @ %id @ ", " @ %mousePoint @ ")");
     %position = %mousePoint;
     %halfParentWidth = %this.sprite.Extent.x / 2;
     %halfParentHeight = %this.sprite.Extent.y / 2;
@@ -796,7 +795,6 @@ function VsDynamicButton::onMouseDown(%this, %id, %mousePoint)
 
 function VsDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseClickCount)
 {
-    echo(" @@@ VsDynamicButton::onMouseDragged(" @ %this @ ", " @ %modifier @ ", " @ %mousePoint @ ", " @ %mouseClickCount @ ")");
     //if (!%this.getParent().isActive())
         //return;
 
@@ -805,6 +803,7 @@ function VsDynamicButton::onMouseDragged(%this, %modifier, %mousePoint, %mouseCl
     %halfParentHeight = %this.sprite.Extent.y / 2;
     %position.x -= %halfParentWidth;
     %position.y -= %halfParentHeight;
+    %this.sprite.data = setWord(%this.sprite.data, 5, InventoryDialog.storePane.getID());
     Inventory.createDraggingControl(%this.sprite, %position, %mousePoint, %this.sprite.Extent);
 }
 

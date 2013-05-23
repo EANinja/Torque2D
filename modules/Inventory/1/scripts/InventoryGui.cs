@@ -51,8 +51,11 @@ function InventoryDialog::onControlDropped( %this, %control, %position )
     if ( %this.inventoryPane.pointInControl( %position.x, %position.y ) )
         %this.inventoryPane.onControlDropped( %control, %position );
 }
+
 function InventoryDialog::deleteObject(%this, %obj)
 {
+    if (%obj $= "" || !isObject(%obj))
+        return;
     %childCount = %obj.getCount();
     for(%i = 0; %i < %childCount; %i++)
     {
@@ -133,7 +136,7 @@ function InventoryDialog::initialize(%this)
         HorizSizing="relative";
         VertSizing="relative";
         Position="250 0";
-        Extent="774 768";
+        Extent="774 650";
         MinExtent="240 320";
         Visible="1";
     };
@@ -144,15 +147,67 @@ function InventoryDialog::initialize(%this)
     Inventory.inventoryContainer.resizeContainer();
     Inventory.inventoryContainer.setCellBackground("Inventory:bagGrid");
 
+    %infoPanePosX = %this.inventoryPane.Position.x;
+    %infoPanePosY = %this.inventoryPane.Position.y;
+    
+    %infoPanePosY += %this.inventoryPane.Extent.y + 18;
+    %infoPanePos = %infoPanePosX SPC %infoPanePosY;
+    %this.infoPane = new GuiControl()
+    {
+        Name="InfoPane";
+        Profile="InventoryDefaultProfile";
+        HorizSizing="relative";
+        VertSizing="relative";
+        Position=%infoPanePos;
+        Extent="774 50";
+        MinExtent="10 10";
+        Visible="1";
+    };
+    %this.addGuiControl(%this.infoPane);
+
+    %noMoneyLabel = new GuiTextCtrl()
+    {
+        Profile="InventoryRedTextProfile";
+        HorizSizing="relative";
+        VertSizing="relative";
+        Position="10 10";
+        Extent="350 20";
+        MinExtent="10 10";
+        Visible="1";
+        text = "";
+    };
+    %this.infoPane.addGuiControl(%noMoneyLabel);
+    %this.noCashCtrl = %noMoneyLabel;
+
+    %moneyLabel = new GuiTextCtrl()
+    {
+        Profile="InventoryDefaultProfile";
+        HorizSizing="relative";
+        VertSizing="relative";
+        Position="10 30";
+        Extent="100 20";
+        MinExtent="10 10";
+        Visible="1";
+        text = "Current Cash: ";
+    };
+    %this.infoPane.addGuiControl(%moneyLabel);
+
+    %currentCash = new GuiTextCtrl()
+    {
+        Profile="InventoryDefaultProfile";
+        HorizSizing="relative";
+        VertSizing="relative";
+        Position=(%moneyLabel.Position.x + %moneyLabel.Extent.x) SPC "30";
+        Extent="50 20";
+        MinExtent="10 10";
+        Visible="1";
+        text = "";
+    };
+    %this.infoPane.addGuiControl(%currentCash);
+    %this.currentCashCtrl = %currentCash;
+    %this.currentCashCtrl.text = $PlayerMoney;
+
     %this.initialized = true;
-}
-
-function InventoryDialog::buyItem(%this, %item)
-{
-}
-
-function InventoryDialog::sellItem(%this, %item)
-{
 }
 
 function InventoryDialog::populateStorePane(%this)
@@ -166,7 +221,7 @@ function InventoryDialog::populateStorePane(%this)
         %image = getWord(%itemRecord, 0);
         %name = getWord(%itemRecord, 1);
         %price = getWord(%itemRecord, 2);
-        Inventory.storeContainer.addButton(%this.createItemButton(%image, %name, %price), Inventory.storeInventory, "invButtonClick", %itemRecord);
+        Inventory.storeContainer.addButton(%this.createItemButton(%image, %name, %price), Inventory.storeInventory, "invButtonClick", %itemRecord SPC Inventory.storeContainer.getID());
     }
     Inventory.storeContainer.resizeContainer();
 }
@@ -256,19 +311,17 @@ function InventoryDialog::createItemButton(%this, %itemImage, %itemName, %itemPr
 
 function storeContainerClass::onControlDropped(%this, %control, %position)
 {
-    echo(" @@@ dropped in store");
-    %container = InventoryDialog.storePane;
+    %container = Inventory.storeContainer;
     %dropPosition = Vector2Sub(%position, %container.getGlobalPosition());
     // code to sell item to store.  Add to store inventory, remove from 
     // player inventory, credit player with money.
+    %source = getWord(%control.data, 5);
+    if (%source !$= %container.getID())
+        Inventory.containerInventory.sellItem(%control.data);
 }
 
 function inventoryContainerClass::onControlDropped(%this, %control, %position)
 {
-    echo(" @@@ dropped in inventory");
     %container = InventoryDialog.inventoryPane;
     %dropPosition = Vector2Sub(%position, %container.getGlobalPosition());
-    // code to buy item from store.  Check for sufficient player funds, if so 
-    // debit funds, remove item from store inventory and add it to player
-    // inventory.
 }

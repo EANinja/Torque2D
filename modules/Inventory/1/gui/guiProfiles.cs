@@ -204,6 +204,27 @@ if (!isObject(InventoryTextProfile)) new GuiControlProfile (InventoryTextProfile
 
 //-----------------------------------------------------------------------------
 
+if (!isObject(InventoryRedTextProfile)) new GuiControlProfile (InventoryRedTextProfile : InventoryTextProfile)
+{
+    border=false;
+
+    // font
+    fontType = $platformFontType;
+    fontSize = $platformFontSize;
+
+    fontColor = "red";
+
+    modal = true;
+    justify = "left";
+    autoSizeWidth = false;
+    autoSizeHeight = false;
+    returnTab = false;
+    numbersOnly = false;
+    cursorColor = "0 0 0 255";
+};
+
+//-----------------------------------------------------------------------------
+
 if (!isObject(InventoryCheckBoxProfile)) new GuiControlProfile (InventoryCheckBoxProfile)
 {
     opaque = false;
