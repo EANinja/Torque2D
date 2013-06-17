@@ -39,6 +39,7 @@
 #include "assets/assetPtr.h"
 #endif
 
+#include "memory/frameAllocator.h"
 #ifndef _UTILITY_H_
 #include "2d/core/utility.h"
 #endif
@@ -78,9 +79,13 @@ private:
     U32                     mFontPadding;
     Vector2                 mFontSize;
     TextAlignment           mTextAlignment;
+	bool					mWrapText;
+	FrameTemp<StringBuffer> mTextLines;
 
 private:
     void calculateSpatials( void );
+	void calcWrappedText( void );
+	S32 getWordLength( const char* );
 
 public:
     ImageFont();

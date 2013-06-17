@@ -89,7 +89,9 @@ IMPLEMENT_CONOBJECT(ImageFont);
 ImageFont::ImageFont() :
     mTextAlignment( ImageFont::ALIGN_CENTER ),
     mFontSize( 1.0f, 1.0f ),
-    mFontPadding( 0 )
+    mFontPadding( 0 ),
+	mWrapText(false),
+	mTextLines(20)
 {
    // Use a static body by default.
    mBodyDefinition.type = b2_staticBody;
@@ -116,6 +118,7 @@ void ImageFont::initPersistFields()
     addProtectedField("textAlignment", TypeEnum, Offset(mTextAlignment, ImageFont), &setTextAlignment, &defaultProtectedGetFn, &writeTextAlignment, 1, &gTextAlignmentTable, "");
     addProtectedField("fontSize", TypeVector2, Offset(mFontSize, ImageFont), &setFontSize, &defaultProtectedGetFn,&writeFontSize, "" );
     addProtectedField("fontPadding", TypeF32, Offset(mFontPadding, ImageFont), &setFontPadding, &defaultProtectedGetFn, &writeFontPadding, "" );
+	addProtectedField("wordWrap", TypeBool, Offset(mWrapText, ImageFont), &defaultProtectedSetFn, &defaultProtectedGetFn, &defaultProtectedWriteFn, "" );
 }
 
 //-----------------------------------------------------------------------------
@@ -397,4 +400,115 @@ void ImageFont::calculateSpatials( void )
 bool ImageFont::setTextAlignment( void* obj, const char* data )
 {
     static_cast<ImageFont*>( obj )->setTextAlignment( getTextAlignmentEnum(data) ); return false;
+}
+
+//-----------------------------------------------------------------------------
+
+void ImageFont::calcWrappedText( void )
+{
+	StringBuffer renderText = mText;
+	if( renderText.length() == 0 )
+        return;
+
+    // Set text bounds.
+    Point2I textBounds( 0, 0 );
+
+    // Fetch the width of a space.
+    const F32 spaceWidth = mFontSize.x;
+
+    // Fetch the maximum allowed tooltip extent.
+    const F32 maxTextWidth = mSize.x;
+
+    // Fetch word count.
+	const char* textBuffer = renderText.getPtr8();
+    const S32 wordCount = StringUnit::getUnitCount( textBuffer, " " );
+
+    // Reset line storage.
+	const F32 tooltipLineStride = mFontSize.y + (mFontSize.y * 0.05f);
+    const S32 maxTooltipLines = 20;
+    S32 textLineCount = 0;
+    F32 textLineWidth = 0.0f;
+
+    // Reset word indexing.
+    S32 wordStartIndex = 0;
+    S32 wordEndIndex = 0;
+
+    // Search for end word.
+    while( true )
+    {
+        // Do we have any words left?
+        if ( wordEndIndex < wordCount )
+        {
+            // Yes, so fetch the word.
+            const char* pWord = StringUnit::getUnit( textBuffer, wordEndIndex, " " );
+
+            // Add word length.
+            const F32 wordLength = getWordLength( pWord ) + spaceWidth;
+
+            // Do we still have room?
+            if ( (textLineWidth + wordLength) < maxTextWidth )
+            {
+                // Yes, so add word length.
+                textLineWidth += wordLength;
+
+                // Next word.
+                wordEndIndex++;
+
+                continue;
+            }
+
+            // Do we have any lines left?
+            if ( textLineCount < maxTooltipLines )
+            {
+                // Yes, so insert line.
+                mTextLines[textLineCount++] = StringUnit::getUnits( textBuffer, wordStartIndex, wordEndIndex-1, " " );
+
+                // Update horizontal text bounds.
+                if ( textLineWidth > textBounds.x )
+                    textBounds.x = textLineWidth;
+            }
+
+            // Set new line length.
+            textLineWidth = wordLength;
+
+            // Set word start.
+            wordStartIndex = wordEndIndex;
+
+            // Next word.
+            wordEndIndex++;
+
+            continue;
+        }
+
+        // Do we have any words left?
+        if ( wordStartIndex < wordCount )
+        {
+            // Yes, so do we have any lines left?
+            if ( textLineCount < maxTooltipLines )
+            {
+                // Yes, so insert line.
+                mTextLines[textLineCount++] = StringUnit::getUnits( textBuffer, wordStartIndex, wordCount-1, " " );
+
+                // Update horizontal text bounds.
+                if ( textLineWidth > textBounds.x )
+                    textBounds.x = textLineWidth;
+            }
+			else
+			{
+				Con::errorf("ImageFont object wrapped text beyond the 20 line limit: %d:%s", getId(), getName());
+			}
+        }
+
+        break;
+    }
+
+    return;
+}
+
+S32 ImageFont::getWordLength( const char* text )
+{
+	S32 len = 0;
+	for (int i = 0; text[i] != NULL; i++)
+		len++;
+	return len;
 }

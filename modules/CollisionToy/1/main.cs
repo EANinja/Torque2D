@@ -38,8 +38,22 @@ function CollisionToy::create( %this )
     
     // Reset the toy.
     CollisionToy.reset();
+    GlobalActionMap.bind( keyboard, "c", ToggleCollision );
 }
 
+function ToggleCollision(%arg)
+{
+    echo(" @@@ ToggleCollision: " @ %arg);
+    for(%i = 0; %i < SandboxScene.getCount(); %i++)
+    {
+        %obj = SandboxScene.getObject(%i);
+        if (%obj.class $= "CollisionToyBall")
+        {
+            echo(" @@@ " @ %obj @ " : State : " @ %obj.enabled);
+            %obj.setEnabled(%arg);
+        }
+    }
+}
 
 //-----------------------------------------------------------------------------
 
