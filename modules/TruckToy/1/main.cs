@@ -48,7 +48,7 @@ function TruckToy::create( %this )
     TruckToy.ProjectileRate = 3000;
     TruckToy.ExplosionScale = 1;
     
-    TruckToy.RotateCamera = true;
+    TruckToy.RotateCamera = false;
     
     // Add the custom controls.
     addNumericOption( "Wheel Speed", 100, 1000, 50, "setWheelSpeed", TruckToy.WheelSpeed, false, "Sets the rotational speed of the wheel when it is put into drive." );
